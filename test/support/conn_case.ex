@@ -26,6 +26,10 @@ defmodule MagnemiteWeb.ConnCase do
 
       alias MagnemiteWeb.Router.Helpers, as: Routes
 
+      defp parsed_resp_body!(%Plug.Conn{resp_body: resp_body}) do
+        Jason.decode!(resp_body)
+      end
+
       # The default endpoint for testing
       @endpoint MagnemiteWeb.Endpoint
     end
