@@ -11,6 +11,8 @@ defmodule Magnemite.Customers.Customer do
     field :email
     field :gender, {:array, Ecto.Enum}, values: Customers.GenderOptions.list()
     field :name
+
+    has_one :address, Customers.Address
   end
 
   def changeset(customer, params) do

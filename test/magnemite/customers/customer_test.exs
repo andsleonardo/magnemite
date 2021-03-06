@@ -26,6 +26,10 @@ defmodule Magnemite.Customers.CustomerTest do
     test ":name defaults to nil" do
       assert %Customer{name: nil} = %Customer{}
     end
+
+    test "has :address association" do
+      assert %Customer{address: %Ecto.Association.NotLoaded{}} = %Customer{}
+    end
   end
 
   describe "changeset/2" do

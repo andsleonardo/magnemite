@@ -15,6 +15,11 @@ defmodule Magnemite.Factories.CustomerFactory do
         }
       end
 
+      def with_address(%Customers.Customer{} = customer) do
+        insert(:address, customer: customer)
+        customer
+      end
+
       defp random_gender do
         Enum.random(Customers.GenderOptions.list())
       end
