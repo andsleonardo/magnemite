@@ -5,7 +5,13 @@ defmodule Magnemite.Customers do
 
   use Magnemite.Changeset
 
-  alias __MODULE__.{Customer, GenderOptions}
+  alias __MODULE__.{
+    AddressValidator,
+    Customer,
+    CustomerValidator,
+    GenderOptions
+  }
+
   alias Magnemite.Repo
 
   defdelegate gender_options, to: GenderOptions, as: :list
@@ -55,5 +61,15 @@ defmodule Magnemite.Customers do
     customer
     |> Repo.preload(:address)
     |> changeset_fun.(params)
+  end
+
+  @doc """
+  Checks if a customer has all of its fields filled up.
+  """
+  @spec complete_customer_with_address?(Customer.t()) :: boolean()
+  def complete_customer_with_address?(customer) do
+
+    CustomerValidator.complete_customer?(customer) &&
+      AddressValidator.complete_address?(customer.address)
   end
 end

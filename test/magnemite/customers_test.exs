@@ -79,4 +79,24 @@ defmodule Magnemite.CustomersTest do
       assert [_] = Customers.list_customers()
     end
   end
+
+  describe "complete_customer_with_address?/1" do
+    @complete_customer build(:customer, address: build(:address))
+
+    test "returns false when customer is incomplete" do
+      customer = %{@complete_customer | name: nil}
+
+      refute Customers.complete_customer_with_address?(customer)
+    end
+
+    test "returns false when customer is complete, but their address is not" do
+      customer = %{@complete_customer | address: build(:address, city: nil)}
+
+      refute Customers.complete_customer_with_address?(customer)
+    end
+
+    test "returns true when customer and their address are complete" do
+      assert Customers.complete_customer_with_address?(@complete_customer)
+    end
+  end
 end
