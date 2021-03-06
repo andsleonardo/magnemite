@@ -33,4 +33,13 @@ defmodule Magnemite.AccountsTest do
       end
     end
   end
+
+  describe "complete_account_opening_request/1" do
+    test "changes the status of an account_opening_request to :complete" do
+      account_opening_request = insert(:pending_account_opening_request)
+
+      assert {:ok, %AccountOpeningRequest{status: :complete}} =
+               Accounts.complete_account_opening_request(account_opening_request)
+    end
+  end
 end

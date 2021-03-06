@@ -10,6 +10,10 @@ defmodule Magnemite.Accounts do
     AccountOpeningRequestStatuses
   }
 
+  defdelegate account_opening_request_statuses,
+    to: AccountOpeningRequestStatuses,
+    as: :list
+
   @doc """
   Gets an account opening request with a customer_id or creates one if it doesn't exist.
   """
@@ -30,7 +34,16 @@ defmodule Magnemite.Accounts do
     |> Repo.handle_operation_result()
   end
 
-  defdelegate account_opening_request_statuses,
-    to: AccountOpeningRequestStatuses,
-    as: :list
+  @spec complete_account_opening_request(AccountOpeningRequest.t()) ::
+          {:ok, AccountOpeningRequest.t()} | {:error, map()}
+  def complete_account_opening_request(account_opening_request) do
+    update_account_opening_request(account_opening_request, %{status: :complete})
+  end
+
+  defp update_account_opening_request(account_opening_request, params) do
+    account_opening_request
+    |> __MODULE__.AccountOpeningRequest.changeset(params)
+    |> Repo.update()
+    |> Repo.handle_operation_result()
+  end
 end
