@@ -5,7 +5,11 @@ defmodule MagnemiteWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", MagnemiteWeb do
+  scope "/api", MagnemiteWeb.Api do
     pipe_through :api
+
+    scope "/v1", V1 do
+      resources "/accounts", AccountController, only: [:create]
+    end
   end
 end
