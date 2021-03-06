@@ -15,11 +15,22 @@ defmodule Magnemite.Customers.Customer do
     has_one :address, Customers.Address
   end
 
-  def changeset(customer, params) do
+  @doc """
+  Specific changeset for creating new customers.
+  """
+  def creation_changeset(customer, params) do
     customer
     |> cast(params, [:birth_date, :cpf, :email, :gender, :name])
     |> validate_required([:cpf])
     |> unsafe_validate_unique([:cpf], Repo)
     |> unique_constraint([:cpf])
+  end
+
+  @doc """
+  Specific changeset for updating existing customers.
+  """
+  def update_changeset(customer, params) do
+    customer
+    |> cast(params, [:birth_date, :email, :gender, :name])
   end
 end
