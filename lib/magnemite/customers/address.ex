@@ -5,6 +5,14 @@ defmodule Magnemite.Customers.Address do
 
   alias Magnemite.Customers
 
+  @type t :: %__MODULE__{
+          id: Ecto.UUID.t(),
+          city: String.t(),
+          country: String.t(),
+          state: String.t(),
+          customer_id: Ecto.UUID.t()
+        }
+
   schema "addresses" do
     field :city
     field :country

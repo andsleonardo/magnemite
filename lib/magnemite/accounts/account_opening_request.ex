@@ -7,6 +7,13 @@ defmodule Magnemite.Accounts.AccountOpeningRequest do
 
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{
+          id: Ecto.UUID.t(),
+          status: atom(),
+          customer: Customers.Customer.t(),
+          customer_id: Ecto.UUID.t()
+        }
+
   schema "account_opening_requests" do
     field :status, Ecto.Enum,
       values: Accounts.AccountOpeningRequestStatuses.list(),

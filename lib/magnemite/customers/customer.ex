@@ -5,6 +5,16 @@ defmodule Magnemite.Customers.Customer do
 
   alias Magnemite.{Customers, Repo}
 
+  @type t :: %__MODULE__{
+          id: Ecto.UUID.t(),
+          address: Customers.Address.t() | none(),
+          birth_date: Date.t(),
+          cpf: String.t(),
+          email: String.t(),
+          gender: [atom()],
+          name: String.t()
+        }
+
   schema "customers" do
     field :birth_date, :date
     field :cpf
