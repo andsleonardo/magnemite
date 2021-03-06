@@ -5,6 +5,7 @@ defmodule Magnemite.Factory do
 
   use Magnemite.Factories.{
     AddressFactory,
-    CustomerFactory
+    CustomerFactory,
+    AccountOpeningRequestFactory
   }
 end
