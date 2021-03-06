@@ -4,8 +4,6 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
 
   alias Magnemite.Accounts.AccountOpeningRequest
 
-  import Magnemite.Factory
-
   describe "schema/2" do
     test ":status defaults to :pending" do
       assert %AccountOpeningRequest{status: :pending} = %AccountOpeningRequest{}
@@ -18,8 +16,6 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
   end
 
   describe "changeset/2" do
-    @account_opening_request_params params_for(:account_opening_request)
-
     test "casts :status" do
       status = :complete
 
