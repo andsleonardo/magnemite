@@ -12,7 +12,7 @@ defmodule Magnemite.Customers.Customer do
     field :gender, {:array, Ecto.Enum}, values: Customers.GenderOptions.list()
     field :name
 
-    has_one :address, Customers.Address
+    has_one :address, Customers.Address, on_replace: :update
   end
 
   @doc """
@@ -20,7 +20,14 @@ defmodule Magnemite.Customers.Customer do
   """
   def creation_changeset(customer, params) do
     customer
-    |> cast(params, [:birth_date, :cpf, :email, :gender, :name])
+    |> cast(params, [
+      :birth_date,
+      :cpf,
+      :email,
+      :gender,
+      :name
+    ])
+    |> cast_assoc(:address, with: &Customers.Address.changeset/2)
     |> validate_required([:cpf])
     |> unsafe_validate_unique([:cpf], Repo)
     |> unique_constraint([:cpf])
@@ -31,6 +38,12 @@ defmodule Magnemite.Customers.Customer do
   """
   def update_changeset(customer, params) do
     customer
-    |> cast(params, [:birth_date, :email, :gender, :name])
+    |> cast(params, [
+      :birth_date,
+      :email,
+      :gender,
+      :name
+    ])
+    |> cast_assoc(:address, with: &Customers.Address.changeset/2)
   end
 end

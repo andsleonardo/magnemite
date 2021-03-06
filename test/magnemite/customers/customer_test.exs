@@ -70,6 +70,13 @@ defmodule Magnemite.Customers.CustomerTest do
                Customer.creation_changeset(%Customer{}, %{gender: gender})
     end
 
+    test "cast :address association" do
+      address_params = params_for(:address)
+
+      assert %Changeset{changes: %{address: %Changeset{}}} =
+               Customer.creation_changeset(%Customer{}, %{address: address_params})
+    end
+
     test "requires :gender to be within range of gender options" do
       errors =
         %Customer{}
@@ -120,6 +127,13 @@ defmodule Magnemite.Customers.CustomerTest do
 
       assert %Changeset{changes: %{gender: ^gender}} =
                Customer.update_changeset(%Customer{}, %{gender: gender})
+    end
+
+    test "cast :address association" do
+      address_params = params_for(:address)
+
+      assert %Changeset{changes: %{address: %Changeset{}}} =
+        Customer.update_changeset(%Customer{}, %{address: address_params})
     end
 
     test "doesn't cast :cpf" do
