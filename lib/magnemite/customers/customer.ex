@@ -5,6 +5,8 @@ defmodule Magnemite.Customers.Customer do
 
   alias Magnemite.{Customers, Repo}
 
+  import Brcpfcnpj.Changeset
+
   @type t :: %__MODULE__{
           id: Ecto.UUID.t(),
           address: Customers.Address.t() | none(),
@@ -14,6 +16,8 @@ defmodule Magnemite.Customers.Customer do
           gender: [atom()],
           name: String.t()
         }
+
+  @email_regex ~r/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
 
   schema "customers" do
     field :birth_date, :date
@@ -37,10 +41,10 @@ defmodule Magnemite.Customers.Customer do
       :gender,
       :name
     ])
-    |> cast_assoc(:address, with: &Customers.Address.changeset/2)
     |> validate_required([:cpf])
     |> unsafe_validate_unique([:cpf], Repo)
     |> unique_constraint([:cpf])
+    |> changeset()
   end
 
   @doc """
@@ -54,6 +58,13 @@ defmodule Magnemite.Customers.Customer do
       :gender,
       :name
     ])
+    |> changeset()
+  end
+
+  defp changeset(changeset) do
+    changeset
     |> cast_assoc(:address, with: &Customers.Address.changeset/2)
+    |> validate_format(:email, @email_regex, message: "is an invalid email")
+    |> validate_cpf(:cpf, message: "is an invalid CPF")
   end
 end

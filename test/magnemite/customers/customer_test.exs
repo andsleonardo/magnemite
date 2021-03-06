@@ -96,6 +96,24 @@ defmodule Magnemite.Customers.CustomerTest do
 
       assert "has already been taken" in errors
     end
+
+    test "doesn't accept an invalid :email" do
+      errors =
+        %Customer{}
+        |> Customer.creation_changeset(%{email: "invalid_email"})
+        |> errors_on(:email)
+
+      assert "is an invalid email" in errors
+    end
+
+    test "doesn't accept an invalid :cpf" do
+      errors =
+        %Customer{}
+        |> Customer.creation_changeset(%{cpf: "12345678911"})
+        |> errors_on(:cpf)
+
+      assert "is an invalid CPF" in errors
+    end
   end
 
   describe "update_changeset/2" do
@@ -133,7 +151,7 @@ defmodule Magnemite.Customers.CustomerTest do
       address_params = params_for(:address)
 
       assert %Changeset{changes: %{address: %Changeset{}}} =
-        Customer.update_changeset(%Customer{}, %{address: address_params})
+               Customer.update_changeset(%Customer{}, %{address: address_params})
     end
 
     test "doesn't cast :cpf" do
@@ -151,6 +169,24 @@ defmodule Magnemite.Customers.CustomerTest do
         |> errors_on(:gender)
 
       assert "is invalid" in errors
+    end
+
+    test "doesn't accept an invalid :email" do
+      errors =
+        %Customer{}
+        |> Customer.creation_changeset(%{email: "invalid_email"})
+        |> errors_on(:email)
+
+      assert "is an invalid email" in errors
+    end
+
+    test "doesn't accept an invalid :cpf" do
+      errors =
+        %Customer{}
+        |> Customer.creation_changeset(%{cpf: "12345678911"})
+        |> errors_on(:cpf)
+
+      assert "is an invalid CPF" in errors
     end
   end
 end
