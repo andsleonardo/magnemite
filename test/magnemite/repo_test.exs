@@ -19,7 +19,7 @@ defmodule Magnemite.RepoTest do
         ]
       }
 
-      assert {:error,
+      assert {:error, :changeset,
               %{
                 field1: ["can't be blank"],
                 field2: ["is invalid"]

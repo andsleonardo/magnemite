@@ -21,7 +21,7 @@ defmodule Magnemite.AccountsTest do
     returns an error when trying to create an account opening request
     with a customer_id that doesn not match any customers
     """ do
-      assert {:error, %{customer: ["does not exist"]}} =
+      assert {:error, :changeset, %{customer: ["does not exist"]}} =
                Accounts.get_or_create_account_opening_request(Ecto.UUID.generate())
     end
 
