@@ -1,5 +1,5 @@
 defmodule Magnemite.Customers.AddressValidatorTest do
-  use Magnemite.DataCase, async: true
+  use ExUnit.Case, async: true
 
   alias Magnemite.Customers.AddressValidator
 
