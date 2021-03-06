@@ -1,5 +1,5 @@
 defmodule Magnemite.Customers.CustomerTest do
-  use ExUnit.Case, async: true
+  use Magnemite.DataCase, async: true
   use Magnemite.Changeset
 
   alias Magnemite.Customers.Customer
@@ -75,6 +75,17 @@ defmodule Magnemite.Customers.CustomerTest do
         |> errors_on(:gender)
 
       assert "is invalid" in errors
+    end
+
+    test "invalidates a non-unique :cpf" do
+      existing_customer = insert(:customer)
+
+      errors =
+        %Customer{}
+        |> Customer.changeset(%{cpf: existing_customer.cpf})
+        |> errors_on(:cpf)
+
+      assert "has already been taken" in errors
     end
   end
 end

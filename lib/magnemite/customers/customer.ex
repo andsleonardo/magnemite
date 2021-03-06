@@ -3,7 +3,7 @@ defmodule Magnemite.Customers.Customer do
 
   use Magnemite.{Changeset, Schema}
 
-  alias Magnemite.Customers
+  alias Magnemite.{Customers, Repo}
 
   schema "customers" do
     field :birth_date, :date
@@ -19,5 +19,7 @@ defmodule Magnemite.Customers.Customer do
     customer
     |> cast(params, [:birth_date, :cpf, :email, :gender, :name])
     |> validate_required([:cpf])
+    |> unsafe_validate_unique([:cpf], Repo)
+    |> unique_constraint([:cpf])
   end
 end
