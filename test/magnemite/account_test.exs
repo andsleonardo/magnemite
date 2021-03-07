@@ -1,18 +1,25 @@
 defmodule Magnemite.AccountTest do
   use ExUnit.Case, async: true
 
-  import Magnemite.Factory
+  alias Magnemite.{Account, Accounts}
 
-  alias Magnemite.Account
+  import Magnemite.Factory
 
   describe "struct" do
     @account_params %{
-      customer: build(:customer),
-      status: params_for(:account_opening_request).status
+      customer: build(:customer, id: Ecto.UUID.generate()),
+      referrer: build(:customer, id: Ecto.UUID.generate()),
+      status: Enum.random(Accounts.account_opening_request_statuses())
     }
 
     test "enforces :customer key" do
       params = Map.drop(@account_params, [:customer])
+
+      assert_raise ArgumentError, fn -> struct!(Account, params) end
+    end
+
+    test "enforces :referrer_id key" do
+      params = Map.drop(@account_params, [:status])
 
       assert_raise ArgumentError, fn -> struct!(Account, params) end
     end

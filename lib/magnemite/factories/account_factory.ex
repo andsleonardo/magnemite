@@ -16,6 +16,7 @@ defmodule Magnemite.Factories.AccountFactory do
       def account_factory(attrs) do
         %Account{
           customer: build(:customer),
+          referrer: build(:customer),
           status: random_status()
         }
         |> merge_attributes(attrs)
