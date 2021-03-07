@@ -27,6 +27,8 @@ defmodule Magnemite.Customers.Customer do
     field :name
 
     has_one :address, Customers.Address, on_replace: :update
+
+    timestamps()
   end
 
   @doc """

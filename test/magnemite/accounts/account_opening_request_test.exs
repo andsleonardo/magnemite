@@ -13,6 +13,10 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
       assert %AccountOpeningRequest{customer: %Ecto.Association.NotLoaded{}} =
                %AccountOpeningRequest{}
     end
+
+    test "has timestamps" do
+      assert %AccountOpeningRequest{inserted_at: _, updated_at: _} = %AccountOpeningRequest{}
+    end
   end
 
   describe "changeset/2" do

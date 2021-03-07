@@ -19,6 +19,8 @@ defmodule Magnemite.Customers.Address do
     field :state
 
     belongs_to :customer, Customers.Customer
+
+    timestamps()
   end
 
   def changeset(address, params) do

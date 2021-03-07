@@ -20,6 +20,8 @@ defmodule Magnemite.Accounts.AccountOpeningRequest do
       default: Accounts.AccountOpeningRequestStatuses.pending()
 
     belongs_to :customer, Customers.Customer, type: :binary_id
+
+    timestamps()
   end
 
   def changeset(account_opening_request, params) do

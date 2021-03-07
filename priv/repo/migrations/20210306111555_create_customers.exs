@@ -9,6 +9,8 @@ defmodule Magnemite.Repo.Migrations.CreateCustomers do
       add :email, :string
       add :gender, {:array, :string}
       add :name, :string
+
+      timestamps()
     end
   end
 end

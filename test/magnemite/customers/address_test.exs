@@ -26,6 +26,10 @@ defmodule Magnemite.Customers.AddressTest do
     test "has :customer association" do
       assert %Address{customer: %Ecto.Association.NotLoaded{}} = %Address{}
     end
+
+    test "has timestamps" do
+      assert %Address{inserted_at: _, updated_at: _} = %Address{}
+    end
   end
 
   describe "changeset/2" do
