@@ -29,5 +29,7 @@ defmodule Magnemite.Accounts.AccountOpeningRequest do
     |> cast(params, [:status, :customer_id])
     |> validate_required([:customer_id])
     |> assoc_constraint(:customer)
+    |> unsafe_validate_unique([:customer_id], Repo)
+    |> unique_constraint([:customer_id])
   end
 end

@@ -1,8 +1,10 @@
 defmodule Magnemite.Accounts.AccountOpeningRequestTest do
-  use ExUnit.Case, async: true
+  use Magnemite.DataCase, async: true
   use Magnemite.Changeset
 
   alias Magnemite.Accounts.AccountOpeningRequest
+
+  import Magnemite.Factory
 
   describe "schema/2" do
     test ":status defaults to :pending" do
@@ -34,6 +36,17 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
         |> errors_on(:status)
 
       assert "is invalid" in errors
+    end
+
+    test "invalidates a non-unique :customer_id" do
+      %{customer_id: customer_id} = insert(:account_opening_request)
+
+      errors =
+        %AccountOpeningRequest{}
+        |> AccountOpeningRequest.changeset(%{customer_id: customer_id})
+        |> errors_on(:customer_id)
+
+      assert "has already been taken" in errors
     end
   end
 end
