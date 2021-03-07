@@ -8,11 +8,27 @@ defmodule Magnemite.Factories.CustomerFactory do
       def customer_factory do
         %Customers.Customer{
           birth_date: Faker.Date.date_of_birth(),
-          cpf: Brcpfcnpj.cpf_generate(),
+          cpf: random_cpf(),
           email: Faker.Internet.email(),
           gender: [random_gender()],
           name: Faker.Person.PtBr.name()
         }
+      end
+
+      def complete_customer_factory(attrs) do
+        customer_factory()
+        |> merge_attributes(referral_code: build(:referral_code))
+        |> merge_attributes(attrs)
+      end
+
+      def incomplete_customer_factory do
+        %Customers.Customer{
+          cpf: random_cpf()
+        }
+      end
+
+      defp random_cpf do
+        Brcpfcnpj.cpf_generate()
       end
 
       defp random_gender do
