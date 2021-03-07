@@ -2,7 +2,7 @@ defmodule Magnemite.CustomersTest do
   use Magnemite.DataCase, async: true
 
   alias Magnemite.Customers
-  alias Magnemite.Customers.Customer
+  alias Magnemite.Customers.{Customer, ReferralCode}
 
   import Magnemite.Factory
 
@@ -16,6 +16,40 @@ defmodule Magnemite.CustomersTest do
 
     test "returns an empty list when there aren't customers in the database" do
       assert [] = Customers.list_customers()
+    end
+  end
+
+  describe "get_customer/1" do
+    test "returns a customer when it exists" do
+      %{id: customer_id} = insert(:customer)
+
+      assert {:ok, %Customer{id: ^customer_id}} = Customers.get_customer(customer_id)
+    end
+
+    test "returns an error when no customer matches the given id" do
+      assert {:error, :customer_not_found} = Customers.get_customer(Ecto.UUID.generate())
+    end
+  end
+
+  describe "get_referrer/1" do
+    setup do
+      %{
+        customer: insert(:customer)
+      }
+    end
+
+    test "returns the customer having the given referral code number", %{
+      customer: %{id: customer_id} = customer
+    } do
+      referral_code = insert(:referral_code, customer: customer)
+
+      assert {:ok, %Customer{id: ^customer_id}} = Customers.get_referrer(referral_code.number)
+    end
+
+    test "returns an error when there is no customer with the given referral code" do
+      referral_code_number = Customers.generate_referral_code_number()
+
+      assert {:error, :customer_not_found} = Customers.get_referrer(referral_code_number)
     end
   end
 
@@ -97,6 +131,54 @@ defmodule Magnemite.CustomersTest do
 
     test "returns true when customer and their address are complete" do
       assert Customers.complete_customer_with_address?(@complete_customer)
+    end
+  end
+
+  describe "list_referral_codes_numbers/0" do
+    test "lists the referral codes numbers in the database" do
+      [
+        %{number: number1},
+        %{number: number2},
+        %{number: number3}
+      ] = insert_list(3, :referral_code)
+
+      referral_codes_numbers = Customers.list_referral_codes_numbers()
+
+      assert number1 in referral_codes_numbers
+      assert number2 in referral_codes_numbers
+      assert number3 in referral_codes_numbers
+    end
+  end
+
+  describe "get_or_create_referral_code/1" do
+    setup do
+      %{
+        customer: insert(:customer)
+      }
+    end
+
+    test "returns a referral code if one already exists for the given customer", %{
+      customer: customer
+    } do
+      %{id: referral_code_id} = insert(:referral_code, customer: customer)
+
+      assert [_] = Customers.list_referral_codes_numbers()
+
+      assert {:ok, %ReferralCode{id: ^referral_code_id}} =
+               Customers.get_or_create_referral_code(customer)
+
+      assert [_] = Customers.list_referral_codes_numbers()
+    end
+
+    test "creates a referral code when none was created for the given customer before", %{
+      customer: customer
+    } do
+      assert [] = Customers.list_referral_codes_numbers()
+
+      assert {:ok, %ReferralCode{number: referral_code_number}} =
+               Customers.get_or_create_referral_code(customer)
+
+      assert [^referral_code_number] = Customers.list_referral_codes_numbers()
     end
   end
 end

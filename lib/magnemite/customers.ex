@@ -3,17 +3,25 @@ defmodule Magnemite.Customers do
   Internal API for Customers.
   """
 
-  use Magnemite.Changeset
-
   alias __MODULE__.{
     AddressValidator,
     Customer,
     CustomerValidator,
-    GenderOptions
+    GenderOptions,
+    ReferralCode,
+    ReferralCodeGenerator
   }
 
   alias Magnemite.Repo
 
+  import Ecto.Query
+
+  # CUSTOMER
+
+  @doc """
+  Lists gender options for customers.
+  """
+  @spec gender_options() :: [GenderOptions.t()]
   defdelegate gender_options, to: GenderOptions, as: :list
 
   @doc """
@@ -22,6 +30,39 @@ defmodule Magnemite.Customers do
   @spec list_customers() :: [Customer.t()] | []
   def list_customers do
     Repo.all(Customer)
+  end
+
+  @doc """
+  Gets a `%Magnemite.Customers.Customer{}` if any matches the given `id`.
+  """
+  @spec get_customer(Ecto.UUID.t()) :: {:ok, Customer.t()} | {:error, :customer_not_found}
+  def get_customer(id) do
+    Customer
+    |> Repo.get(id)
+    |> case do
+      nil -> {:error, :customer_not_found}
+      customer -> {:ok, customer}
+    end
+  end
+
+  @doc """
+  Gets a `%Magnemite.Customers.Customer{}` by its `referral_code_number`.
+  """
+  @spec get_referrer(String.t()) ::
+          {:ok, Customer.t()} | {:error, :customer_not_found}
+  def get_referrer(nil) do
+    {:error, :customer_not_found}
+  end
+
+  def get_referrer(referral_code_number) do
+    Customer
+    |> join(:left, [c], rc in assoc(c, :referral_code))
+    |> where([_, rc], rc.number == ^referral_code_number)
+    |> Repo.one()
+    |> case do
+      nil -> {:error, :customer_not_found}
+      customer -> {:ok, customer}
+    end
   end
 
   @doc """
@@ -64,12 +105,50 @@ defmodule Magnemite.Customers do
   end
 
   @doc """
-  Checks if a customer has all of its fields filled up.
+  Checks if a `%Magnemite.Customers.Customer{}` has all of its fields filled up.
   """
   @spec complete_customer_with_address?(Customer.t()) :: boolean()
   def complete_customer_with_address?(customer) do
-
     CustomerValidator.complete_customer?(customer) &&
       AddressValidator.complete_address?(customer.address)
+  end
+
+  # REFERRAL CODE
+
+  defdelegate generate_referral_code_number(), to: ReferralCodeGenerator, as: :generate_number
+
+  @doc """
+  Lists all persisted referral code numbers.
+  """
+  @spec list_referral_codes_numbers() :: [String.t()] | []
+  def list_referral_codes_numbers do
+    ReferralCode
+    |> select([rc], rc.number)
+    |> Repo.all()
+  end
+
+  @doc """
+  Gets a `%Magnemite.Customers.ReferralCode{}` for a customer
+  or creates one if no such record exists yet.
+  """
+  @spec get_or_create_referral_code(Customer.t()) ::
+          {:ok, ReferralCode.t()} | {:error, :changeset, map()}
+  def get_or_create_referral_code(%Customer{} = customer) do
+    ReferralCode
+    |> Repo.get_by(customer_id: customer.id)
+    |> case do
+      nil -> create_referral_code(customer.id)
+      referral_code -> {:ok, referral_code}
+    end
+  end
+
+  defp create_referral_code(customer_id) do
+    %ReferralCode{}
+    |> ReferralCode.changeset(%{
+      customer_id: customer_id,
+      number: generate_referral_code_number()
+    })
+    |> Repo.insert()
+    |> Repo.handle_operation_result()
   end
 end
