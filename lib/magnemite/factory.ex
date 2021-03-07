@@ -4,6 +4,7 @@ defmodule Magnemite.Factory do
   use ExMachina.Ecto, repo: Magnemite.Repo
 
   use Magnemite.Factories.{
+    AccountFactory,
     AccountOpeningRequestFactory,
     AddressFactory,
     CustomerFactory,
