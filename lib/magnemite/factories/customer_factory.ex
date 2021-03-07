@@ -11,13 +11,8 @@ defmodule Magnemite.Factories.CustomerFactory do
           cpf: Brcpfcnpj.cpf_generate(),
           email: Faker.Internet.email(),
           gender: [random_gender()],
-          name: Faker.Person.PtBr.name(),
+          name: Faker.Person.PtBr.name()
         }
-      end
-
-      def with_address(%Customers.Customer{} = customer) do
-        insert(:address, customer: customer)
-        customer
       end
 
       defp random_gender do

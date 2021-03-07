@@ -31,6 +31,14 @@ defmodule Magnemite.Customers.CustomerTest do
       assert %Customer{address: %Ecto.Association.NotLoaded{}} = %Customer{}
     end
 
+    test "has :referral_code association" do
+      assert %Customer{referral_code: %Ecto.Association.NotLoaded{}} = %Customer{}
+    end
+
+    test "has :account_opening_request association" do
+      assert %Customer{account_opening_request: %Ecto.Association.NotLoaded{}} = %Customer{}
+    end
+
     test "has timestamps" do
       assert %Customer{inserted_at: _, updated_at: _} = %Customer{}
     end
@@ -74,18 +82,11 @@ defmodule Magnemite.Customers.CustomerTest do
                Customer.creation_changeset(%Customer{}, %{gender: gender})
     end
 
-    test "cast :address association" do
+    test "casts :address association" do
       address_params = params_for(:address)
 
       assert %Changeset{changes: %{address: %Changeset{}}} =
                Customer.creation_changeset(%Customer{}, %{address: address_params})
-    end
-
-    test "cast :referral_code association" do
-      referral_code_params = params_for(:referral_code)
-
-      assert %Changeset{changes: %{referral_code: %Changeset{}}} =
-               Customer.update_changeset(%Customer{}, %{referral_code: referral_code_params})
     end
 
     test "requires :gender to be within range of gender options" do
@@ -158,18 +159,11 @@ defmodule Magnemite.Customers.CustomerTest do
                Customer.update_changeset(%Customer{}, %{gender: gender})
     end
 
-    test "cast :address association" do
+    test "casts :address association" do
       address_params = params_for(:address)
 
       assert %Changeset{changes: %{address: %Changeset{}}} =
                Customer.update_changeset(%Customer{}, %{address: address_params})
-    end
-
-    test "cast :referral_code association" do
-      referral_code_params = params_for(:referral_code)
-
-      assert %Changeset{changes: %{referral_code: %Changeset{}}} =
-               Customer.update_changeset(%Customer{}, %{referral_code: referral_code_params})
     end
 
     test "doesn't cast :cpf" do

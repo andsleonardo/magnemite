@@ -3,7 +3,7 @@ defmodule Magnemite.Customers.Customer do
 
   use Magnemite.{Changeset, Schema}
 
-  alias Magnemite.{Customers, Repo}
+  alias Magnemite.{Accounts, Customers, Repo}
 
   import Brcpfcnpj.Changeset
 
@@ -28,6 +28,7 @@ defmodule Magnemite.Customers.Customer do
 
     has_one :address, Customers.Address, on_replace: :update
     has_one :referral_code, Customers.ReferralCode, on_replace: :update
+    has_one :account_opening_request, Accounts.AccountOpeningRequest, on_replace: :update
 
     timestamps()
   end
@@ -67,7 +68,6 @@ defmodule Magnemite.Customers.Customer do
   defp changeset(changeset) do
     changeset
     |> cast_assoc(:address, with: &Customers.Address.changeset/2)
-    |> cast_assoc(:referral_code, with: &Customers.ReferralCode.changeset/2)
     |> validate_format(:email, @email_regex, message: "is an invalid email")
     |> validate_cpf(:cpf, message: "is an invalid CPF")
   end
