@@ -45,7 +45,8 @@ defmodule Magnemite.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.6.0", only: [:test, :dev]},
       {:faker, "~> 0.16", only: [:test, :dev]},
-      {:brcpfcnpj, "~> 0.2.3"}
+      {:brcpfcnpj, "~> 0.2.3"},
+      {:nanoid, "~> 2.0.5"}
     ]
   end
 
