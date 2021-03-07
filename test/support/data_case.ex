@@ -23,7 +23,9 @@ defmodule Magnemite.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+
       import Magnemite.DataCase
+      import Magnemite.Factory
     end
   end
 
