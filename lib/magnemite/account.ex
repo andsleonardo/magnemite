@@ -1,6 +1,6 @@
 defmodule Magnemite.Account do
   @moduledoc false
 
-  @enforce_keys [:customer, :referrer, :status]
-  defstruct [:customer, :referrer, :status]
+  @enforce_keys [:status]
+  defstruct [:status, :referral_code]
 end

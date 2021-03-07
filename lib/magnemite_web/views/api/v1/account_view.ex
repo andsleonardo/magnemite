@@ -3,14 +3,12 @@ defmodule MagnemiteWeb.Api.V1.AccountView do
 
   use MagnemiteWeb, :view
 
-  alias MagnemiteWeb.Api.V1.CustomerView
-
   import MagnemiteWeb.Helpers.AccountStatusMessageTranslator
 
   def render("show.json", %{account: account}) do
     %{
-      customer: render_one(account.customer, CustomerView, "show.json"),
       message: translate_account_status_to_message(account.status),
+      referral_code: account.referral_code,
       status: account.status
     }
   end

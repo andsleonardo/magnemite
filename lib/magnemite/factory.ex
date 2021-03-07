@@ -10,4 +10,8 @@ defmodule Magnemite.Factory do
     CustomerFactory,
     ReferralCodeFactory
   }
+
+  defp referral_code_number do
+    Nanoid.generate_non_secure(8, "123456789")
+  end
 end
