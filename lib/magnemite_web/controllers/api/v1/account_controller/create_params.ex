@@ -11,6 +11,7 @@ defmodule MagnemiteWeb.Api.V1.AccountController.CreateParams do
     :email,
     :name,
     :gender,
+    :referral_code,
     :state
   ]
 
@@ -24,6 +25,7 @@ defmodule MagnemiteWeb.Api.V1.AccountController.CreateParams do
     field :email
     field :name
     field :gender, {:array, :string}, default: []
+    field :referral_code
     field :state
   end
 

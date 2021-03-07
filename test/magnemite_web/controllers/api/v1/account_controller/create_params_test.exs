@@ -36,6 +36,10 @@ defmodule MagnemiteWeb.Api.V1.AccountController.CreateParamsTest do
       assert %CreateParams{name: nil} = %CreateParams{}
     end
 
+    test "has :referral_code and it defaults to nil" do
+      assert %CreateParams{referral_code: nil} = %CreateParams{}
+    end
+
     test "has :state and it defaults to nil" do
       assert %CreateParams{state: nil} = %CreateParams{}
     end
@@ -50,6 +54,7 @@ defmodule MagnemiteWeb.Api.V1.AccountController.CreateParamsTest do
       email: Faker.Internet.email(),
       gender: [to_string(Enum.random(Customers.gender_options()))],
       name: Faker.Person.PtBr.name(),
+      referral_code: Nanoid.generate_non_secure(8, "12345678"),
       state: Faker.Address.PtBr.state()
     }
 
@@ -95,6 +100,13 @@ defmodule MagnemiteWeb.Api.V1.AccountController.CreateParamsTest do
       gender = @create_params.gender
 
       assert %Changeset{changes: %{gender: ^gender}} = CreateParams.changeset(%{gender: gender})
+    end
+
+    test "casts :referral_code as string" do
+      referral_code = @create_params.referral_code
+
+      assert %Changeset{changes: %{referral_code: ^referral_code}} =
+               CreateParams.changeset(%{referral_code: referral_code})
     end
 
     test "casts :state as string" do
