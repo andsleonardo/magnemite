@@ -49,7 +49,7 @@ defmodule Magnemite.CustomersTest do
     test "returns an error when there is no customer with the given referral code" do
       referral_code_number = Customers.generate_referral_code_number()
 
-      assert {:error, :customer_not_found} = Customers.get_referrer(referral_code_number)
+      assert {:error, :invalid_referral_code} = Customers.get_referrer(referral_code_number)
     end
   end
 

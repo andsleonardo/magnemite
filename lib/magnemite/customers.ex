@@ -49,18 +49,14 @@ defmodule Magnemite.Customers do
   Gets a `%Magnemite.Customers.Customer{}` by its `referral_code_number`.
   """
   @spec get_referrer(String.t()) ::
-          {:ok, Customer.t()} | {:error, :customer_not_found}
-  def get_referrer(nil) do
-    {:error, :customer_not_found}
-  end
-
-  def get_referrer(referral_code_number) do
+          {:ok, Customer.t()} | {:error, :invalid_referral_code}
+  def get_referrer(referral_code_number) when not is_nil(referral_code_number) do
     Customer
     |> join(:left, [c], rc in assoc(c, :referral_code))
     |> where([_, rc], rc.number == ^referral_code_number)
     |> Repo.one()
     |> case do
-      nil -> {:error, :customer_not_found}
+      nil -> {:error, :invalid_referral_code}
       customer -> {:ok, customer}
     end
   end
