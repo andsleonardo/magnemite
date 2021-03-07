@@ -7,12 +7,17 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
   import Magnemite.Factory
 
   describe "schema/2" do
-    test ":status defaults to :pending" do
+    test "has :status and it defaults to :pending" do
       assert %AccountOpeningRequest{status: :pending} = %AccountOpeningRequest{}
     end
 
-    test "has :customer association" do
-      assert %AccountOpeningRequest{customer: %Ecto.Association.NotLoaded{}} =
+    test "has :customer association through :customer_id" do
+      assert %AccountOpeningRequest{customer: %Ecto.Association.NotLoaded{}, customer_id: nil} =
+               %AccountOpeningRequest{}
+    end
+
+    test "has :referrer association" do
+      assert %AccountOpeningRequest{referrer: %Ecto.Association.NotLoaded{}, referrer_id: nil} =
                %AccountOpeningRequest{}
     end
 
@@ -22,11 +27,29 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
   end
 
   describe "changeset/2" do
-    test "casts :status" do
+    test "casts :status as atom" do
       status = :complete
 
       assert %Changeset{changes: %{status: ^status}} =
                AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{status: status})
+    end
+
+    test "casts :customer_id as string" do
+      customer_id = Ecto.UUID.generate()
+
+      assert %Changeset{changes: %{customer_id: ^customer_id}} =
+               AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{
+                 customer_id: customer_id
+               })
+    end
+
+    test "casts :referrer_id as string" do
+      referrer_id = Ecto.UUID.generate()
+
+      assert %Changeset{changes: %{referrer_id: ^referrer_id}} =
+               AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{
+                 referrer_id: referrer_id
+               })
     end
 
     test "requires :status to be within range of status options" do
