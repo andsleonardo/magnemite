@@ -1,6 +1,8 @@
 defmodule Magnemite.Customers.GenderOptions do
   @moduledoc false
 
+  @type t :: :female | :male | :non_binary | :other | :rather_not_say | :transgender
+
   @gender_options [
     :female,
     :male,
@@ -10,6 +12,6 @@ defmodule Magnemite.Customers.GenderOptions do
     :transgender
   ]
 
-  @spec list() :: [atom()]
+  @spec list() :: [t()]
   def list, do: @gender_options
 end
