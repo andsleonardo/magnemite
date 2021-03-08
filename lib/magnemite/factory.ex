@@ -8,7 +8,8 @@ defmodule Magnemite.Factory do
     AccountOpeningRequestFactory,
     AddressFactory,
     CustomerFactory,
-    ReferralCodeFactory
+    ReferralCodeFactory,
+    UserFactory
   }
 
   defp referral_code_number do
