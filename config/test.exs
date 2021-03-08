@@ -20,3 +20,8 @@ config :magnemite, MagnemiteWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :argon2_elixir,
+  # Low time cost and memory usage in test mode
+  t_cost: 1,
+  m_cost: 8

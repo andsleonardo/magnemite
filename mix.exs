@@ -46,7 +46,8 @@ defmodule Magnemite.MixProject do
       {:ex_machina, "~> 2.6.0", only: [:test, :dev]},
       {:faker, "~> 0.16", only: [:test, :dev]},
       {:brcpfcnpj, "~> 0.2.3"},
-      {:nanoid, "~> 2.0.5"}
+      {:nanoid, "~> 2.0.5"},
+      {:argon2_elixir, "~> 2.0"}
     ]
   end
 
