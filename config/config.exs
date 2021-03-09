@@ -34,6 +34,10 @@ config :magnemite, Magnemite.Identity.Guardian,
   issuer: "Magnemite",
   secret_key: System.get_env("GUARDIAN_SECRET_KEY")
 
+config :magnemite, MagnemiteWeb.AuthPipeline,
+  module: Magnemite.Identity.Guardian,
+  error_handler: MagnemiteWeb.AuthPipelineErrorHandler
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
