@@ -3,18 +3,21 @@ defmodule Magnemite.Customers.Customer do
 
   use Magnemite.{Changeset, Schema}
 
-  alias Magnemite.{Accounts, Customers, Repo}
+  alias Magnemite.{Accounts, Customers, Identity, Repo}
 
   import Brcpfcnpj.Changeset
 
   @type t :: %__MODULE__{
           id: Ecto.UUID.t(),
+          account_opening_request: Accounts.AccountOpeningRequest.t(),
           address: Customers.Address.t() | none(),
           birth_date: Date.t(),
           cpf: String.t(),
           email: String.t(),
           gender: [atom()],
-          name: String.t()
+          name: String.t(),
+          referral_code: Customers.ReferralCode.t(),
+          user: Identity.User.t()
         }
 
   @email_regex ~r/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
@@ -26,9 +29,11 @@ defmodule Magnemite.Customers.Customer do
     field :gender, {:array, Ecto.Enum}, values: Customers.GenderOptions.list()
     field :name
 
+    has_one :account_opening_request, Accounts.AccountOpeningRequest, on_replace: :update
     has_one :address, Customers.Address, on_replace: :update
     has_one :referral_code, Customers.ReferralCode, on_replace: :update
-    has_one :account_opening_request, Accounts.AccountOpeningRequest, on_replace: :update
+
+    belongs_to :user, Identity.User
 
     timestamps()
   end
@@ -43,7 +48,8 @@ defmodule Magnemite.Customers.Customer do
       :cpf,
       :email,
       :gender,
-      :name
+      :name,
+      :user_id
     ])
     |> validate_required([:cpf])
     |> unsafe_validate_unique([:cpf], Repo)
@@ -68,6 +74,7 @@ defmodule Magnemite.Customers.Customer do
   defp changeset(changeset) do
     changeset
     |> cast_assoc(:address, with: &Customers.Address.changeset/2)
+    |> assoc_constraint(:user)
     |> validate_format(:email, @email_regex, message: "is an invalid email")
     |> validate_cpf(:cpf, message: "is an invalid CPF")
   end

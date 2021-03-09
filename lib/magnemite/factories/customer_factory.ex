@@ -11,7 +11,8 @@ defmodule Magnemite.Factories.CustomerFactory do
           cpf: random_cpf(),
           email: Faker.Internet.email(),
           gender: [random_gender()],
-          name: Faker.Person.PtBr.name()
+          name: Faker.Person.PtBr.name(),
+          user: build(:user)
         }
       end
 

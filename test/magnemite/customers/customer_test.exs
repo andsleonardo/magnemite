@@ -4,8 +4,6 @@ defmodule Magnemite.Customers.CustomerTest do
 
   alias Magnemite.Customers.Customer
 
-  import Magnemite.Factory
-
   describe "schema/2" do
     test ":birth_date defaults to nil" do
       assert %Customer{birth_date: nil} = %Customer{}
@@ -31,12 +29,16 @@ defmodule Magnemite.Customers.CustomerTest do
       assert %Customer{address: %Ecto.Association.NotLoaded{}} = %Customer{}
     end
 
+    test "has :account_opening_request association" do
+      assert %Customer{account_opening_request: %Ecto.Association.NotLoaded{}} = %Customer{}
+    end
+
     test "has :referral_code association" do
       assert %Customer{referral_code: %Ecto.Association.NotLoaded{}} = %Customer{}
     end
 
-    test "has :account_opening_request association" do
-      assert %Customer{account_opening_request: %Ecto.Association.NotLoaded{}} = %Customer{}
+    test "has :user association" do
+      assert %Customer{user: %Ecto.Association.NotLoaded{}} = %Customer{}
     end
 
     test "has timestamps" do
@@ -45,7 +47,7 @@ defmodule Magnemite.Customers.CustomerTest do
   end
 
   describe "creation_changeset/2" do
-    @customer_params params_for(:customer)
+    @customer_params params_for(:customer, user_id: Ecto.UUID.generate())
 
     test "casts :birth_date" do
       birth_date = @customer_params.birth_date
@@ -80,6 +82,13 @@ defmodule Magnemite.Customers.CustomerTest do
 
       assert %Changeset{changes: %{gender: ^gender}} =
                Customer.creation_changeset(%Customer{}, %{gender: gender})
+    end
+
+    test "casts :user_id" do
+      user_id = @customer_params.user_id
+
+      assert %Changeset{changes: %{user_id: ^user_id}} =
+        Customer.creation_changeset(%Customer{}, %{user_id: user_id})
     end
 
     test "casts :address association" do
