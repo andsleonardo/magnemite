@@ -4,8 +4,6 @@ defmodule Magnemite.CustomersTest do
   alias Magnemite.Customers
   alias Magnemite.Customers.{Customer, ReferralCode}
 
-  import Magnemite.Factory
-
   describe "list_customers/0" do
     test "returns the customers in the database when there are any" do
       %{id: customer1_id} = insert(:customer)
@@ -56,7 +54,7 @@ defmodule Magnemite.CustomersTest do
   describe "upsert_customer_by_cpf/2" do
     setup do
       %{
-        customer_params: params_for(:customer)
+        customer_params: params_for(:customer),
       }
     end
 
@@ -72,6 +70,9 @@ defmodule Magnemite.CustomersTest do
     } do
       assert [] = Customers.list_customers()
 
+      user = insert(:user)
+
+      new_customer_params = Map.merge(new_customer_params, %{user_id: user.id})
       result = Customers.upsert_customer_by_cpf(new_cpf, new_customer_params)
 
       {:ok,
