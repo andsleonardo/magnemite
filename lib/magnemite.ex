@@ -3,10 +3,13 @@ defmodule Magnemite do
   Magnemite's public API.
   """
 
-  alias __MODULE__.{Account, Accounts, Customers}
+  alias __MODULE__.{Account, Accounts, Customers, Identity}
   alias __MODULE__.Repo
 
   import Magnemite.Fallback
+
+  defdelegate sign_user_up(username, password), to: Identity, as: :sign_up
+  defdelegate sign_user_in(username, password), to: Identity, as: :sign_in
 
   @spec get_or_open_account(map()) :: any()
   def get_or_open_account(%{cpf: cpf} = account_opening_data) do
