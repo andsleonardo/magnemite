@@ -11,7 +11,8 @@ defmodule Magnemite.Factories.UserFactory do
         %Identity.User{
           username: Faker.Internet.user_name(),
           password: password,
-          encrypted_password: encrypt_password(password)
+          encrypted_password: encrypt_password(password),
+          token: Ecto.UUID.generate()
         }
       end
 

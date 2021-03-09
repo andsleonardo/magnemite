@@ -5,16 +5,20 @@ defmodule Magnemite.Identity.UserTest do
   alias Magnemite.Identity.User
 
   describe "schema/2" do
-    test "has :username and it defaults to nil" do
-      assert %User{username: nil} = %User{}
+    test "has :encrypted_password and it defaults to nil" do
+      assert %User{encrypted_password: nil} = %User{}
     end
 
     test "has :password and it defaults to nil" do
       assert %User{password: nil} = %User{}
     end
 
-    test "has :encrypted_password and it defaults to nil" do
-      assert %User{encrypted_password: nil} = %User{}
+    test "has :token and it defaults to nil" do
+      assert %User{token: nil} = %User{}
+    end
+
+    test "has :username and it defaults to nil" do
+      assert %User{username: nil} = %User{}
     end
 
     test "has :customer association" do
@@ -41,6 +45,13 @@ defmodule Magnemite.Identity.UserTest do
 
       assert %Changeset{changes: %{password: ^password}} =
                User.changeset(%User{}, %{password: password})
+    end
+
+    test "casts :token" do
+      token = @user_params.token
+
+      assert %Changeset{changes: %{token: ^token}} =
+        User.changeset(%User{}, %{token: token})
     end
 
     test "puts hashed password to :encrypted_password" do

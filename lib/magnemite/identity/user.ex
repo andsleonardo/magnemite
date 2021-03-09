@@ -9,9 +9,10 @@ defmodule Magnemite.Identity.User do
   @max_username_length 13
 
   schema "users" do
-    field :username
     field :encrypted_password
     field :password, :string, virtual: true
+    field :token, :string, virtual: true
+    field :username
 
     has_one :customer, Customers.Customer, on_replace: :update
 
