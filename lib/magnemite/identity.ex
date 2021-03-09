@@ -3,8 +3,17 @@ defmodule Magnemite.Identity do
   Internal API for Identity.
   """
 
-  alias __MODULE__.User
+  alias __MODULE__.{Guardian, User}
   alias Magnemite.Repo
+
+  def get_user(id) do
+    User
+    |> Repo.get(id)
+    |> case do
+      nil -> {:error, :user_not_found}
+      user -> {:ok, user}
+    end
+  end
 
   def sign_up(username, password) do
     create_user(username: username, password: password)
