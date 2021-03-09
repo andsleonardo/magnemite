@@ -30,35 +30,28 @@ defmodule Magnemite.Identity.UserTest do
     end
   end
 
-  describe "changeset/2" do
+  describe "create_changeset/2" do
     @user_params params_for(:user)
 
     test "casts :username" do
       username = @user_params.username
 
       assert %Changeset{changes: %{username: ^username}} =
-               User.changeset(%User{}, %{username: username})
+               User.create_changeset(%User{}, %{username: username})
     end
 
     test "casts :password" do
       password = @user_params.password
 
       assert %Changeset{changes: %{password: ^password}} =
-               User.changeset(%User{}, %{password: password})
-    end
-
-    test "casts :token" do
-      token = @user_params.token
-
-      assert %Changeset{changes: %{token: ^token}} =
-        User.changeset(%User{}, %{token: token})
+               User.create_changeset(%User{}, %{password: password})
     end
 
     test "puts hashed password to :encrypted_password" do
       password = @user_params.password
 
       assert %Changeset{changes: %{encrypted_password: encrypted_password}} =
-               User.changeset(%User{}, %{password: password})
+               User.create_changeset(%User{}, %{password: password})
 
       assert is_binary(encrypted_password)
     end
@@ -68,7 +61,7 @@ defmodule Magnemite.Identity.UserTest do
 
       errors =
         %User{}
-        |> User.changeset(%{username: existing_user.username})
+        |> User.create_changeset(%{username: existing_user.username})
         |> errors_on(:username)
 
       assert "has already been taken" in errors

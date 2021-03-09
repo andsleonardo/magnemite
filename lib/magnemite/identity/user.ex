@@ -5,9 +5,6 @@ defmodule Magnemite.Identity.User do
 
   alias Magnemite.{Customers, Repo}
 
-  @min_username_length 3
-  @max_username_length 13
-
   schema "users" do
     field :encrypted_password
     field :password, :string, virtual: true
@@ -25,9 +22,9 @@ defmodule Magnemite.Identity.User do
     |> apply_action(:update)
   end
 
-  def changeset(user, params) do
+  def create_changeset(user, params) do
     user
-    |> cast(params, [:username, :password])
+    |> cast(Map.new(params), [:username, :password])
     |> validate_required([:username, :password])
     |> unsafe_validate_unique([:username], Repo)
     |> unique_constraint([:username])
