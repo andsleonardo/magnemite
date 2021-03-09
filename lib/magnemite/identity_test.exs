@@ -52,6 +52,14 @@ defmodule Magnemite.IdentityTest do
       assert {:ok, %User{id: ^user_id}} = Identity.sign_in(user, password)
     end
 
+    test "returns the user with a newly created token", %{
+      user: user
+    } do
+      assert {:ok, %User{token: user_token}} = Identity.sign_in(user, user.password)
+
+      refute is_nil(user_token)
+    end
+
     test "returns an error when the user doesn't match the given password", %{
       user: user
     } do

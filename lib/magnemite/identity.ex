@@ -27,6 +27,12 @@ defmodule Magnemite.Identity do
   end
 
   def sign_in(%User{} = user, password) do
+    with {:ok, user} <- validate_user_matches_password(user, password) do
+      generate_user_token(user)
+    end
+  end
+
+  defp validate_user_matches_password(user, password) do
     user
     |> Argon2.check_pass(password)
     |> case do
@@ -38,6 +44,12 @@ defmodule Magnemite.Identity do
   def sign_in(username, password) do
     with {:ok, user} <- get_user_by(username: username) do
       sign_in(user, password)
+    end
+  end
+
+  defp generate_user_token(%User{} = user) do
+    with {:ok, token, _} <- Guardian.encode_and_sign(user) do
+      User.edit(user, token: token)
     end
   end
 

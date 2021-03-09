@@ -19,6 +19,12 @@ defmodule Magnemite.Identity.User do
     timestamps()
   end
 
+  def edit(%__MODULE__{} = user, params) do
+    user
+    |> cast(Map.new(params), [:token])
+    |> apply_action(:update)
+  end
+
   def changeset(user, params) do
     user
     |> cast(params, [:username, :password])
