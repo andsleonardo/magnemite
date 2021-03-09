@@ -28,7 +28,7 @@ defmodule MagnemiteWeb.Api.FallbackControllerTest do
       assert %Plug.Conn{status: 400} = conn = FallbackController.call(conn, error)
 
       assert %{
-               "errors" => ["Invalid referral code"]
+               "errors" => ["invalid referral code"]
              } = parsed_resp_body!(conn)
     end
   end

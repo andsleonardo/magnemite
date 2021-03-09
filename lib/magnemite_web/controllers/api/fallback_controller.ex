@@ -16,9 +16,7 @@ defmodule MagnemiteWeb.Api.FallbackController do
   end
 
   defp translate_error(error) when is_atom(error) do
-    ~r/_/
-    |> Regex.replace(Atom.to_string(error), " ")
-    |> String.capitalize()
+    Regex.replace(~r/_/, Atom.to_string(error), " ")
   end
 
   defp render_errors(errors) do
