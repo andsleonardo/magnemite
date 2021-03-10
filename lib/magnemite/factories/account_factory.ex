@@ -1,7 +1,7 @@
 defmodule Magnemite.Factories.AccountFactory do
   @moduledoc false
 
-  alias Magnemite.{Account, Accounts}
+  alias Magnemite.Accounts
 
   defmacro __using__(_opts) do
     quote do
@@ -14,7 +14,7 @@ defmodule Magnemite.Factories.AccountFactory do
       end
 
       def account_factory(attrs) do
-        %Account{
+        %Accounts.Account{
           status: random_status(),
           referral_code: referral_code_number()
         }

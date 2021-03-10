@@ -2,7 +2,7 @@ defmodule MagnemiteTest do
   use Magnemite.DataCase, async: true
 
   alias Magnemite
-  alias Magnemite.{Account, Customers}
+  alias Magnemite.Customers
 
   describe "get_or_open_account/1" do
     @account_opening_data %{
@@ -37,7 +37,7 @@ defmodule MagnemiteTest do
       valid_account_opening_data = Map.take(account_opening_data.valid, [:cpf, :user_id])
 
       assert {:ok,
-              %Account{
+              %{
                 status: :pending,
                 referral_code: nil
               }} = Magnemite.get_or_open_account(valid_account_opening_data)
@@ -51,7 +51,7 @@ defmodule MagnemiteTest do
            account_opening_data: account_opening_data
          } do
       assert {:ok,
-              %Account{
+              %{
                 status: :complete,
                 referral_code: referral_code
               }} = Magnemite.get_or_open_account(account_opening_data.valid)
@@ -70,7 +70,7 @@ defmodule MagnemiteTest do
         Map.take(account_opening_data.valid, [:city, :cpf, :name, :user_id])
 
       assert {:ok,
-              %Account{
+              %{
                 status: :pending,
                 referral_code: nil
               }} = Magnemite.get_or_open_account(valid_account_opening_data)
@@ -87,7 +87,7 @@ defmodule MagnemiteTest do
       insert(:customer, cpf: account_opening_data.valid.cpf, user: user)
 
       assert {:ok,
-              %Account{
+              %{
                 status: :complete,
                 referral_code: referral_code
               }} = Magnemite.get_or_open_account(account_opening_data.valid)

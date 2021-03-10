@@ -4,6 +4,7 @@ defmodule Magnemite.Accounts do
   """
 
   alias __MODULE__.{
+    Account,
     AccountOpeningRequest,
     AccountOpeningRequestStatuses
   }
@@ -62,5 +63,9 @@ defmodule Magnemite.Accounts do
     |> __MODULE__.AccountOpeningRequest.changeset(params)
     |> Repo.update()
     |> Repo.handle_operation_result()
+  end
+
+  def build_account(status, referral_code \\ nil) do
+    struct(Account, %{status: status, referral_code: referral_code})
   end
 end

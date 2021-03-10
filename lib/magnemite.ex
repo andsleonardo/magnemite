@@ -19,7 +19,7 @@ defmodule Magnemite do
          {:ok, account_opening} <- request_account_opening(customer, account_opening_data),
          {:ok, account_opening} <- maybe_complete_account_opening(account_opening, customer),
          {:ok, referral_code} <- maybe_generate_referral_code(customer, account_opening) do
-      {:ok, build_account(account_opening, referral_code)}
+      {:ok, Accounts.build_account(account_opening.status, referral_code.number)}
     end
   end
 
@@ -63,16 +63,5 @@ defmodule Magnemite do
 
   defp maybe_generate_referral_code(customer, %{status: :complete}) do
     Customers.get_or_create_referral_code(customer)
-  end
-
-  defp build_account(account_opening, nil) do
-    struct(Account, %{status: account_opening.status})
-  end
-
-  defp build_account(account_opening, referral_code) do
-    struct(Account, %{
-      referral_code: referral_code.number,
-      status: account_opening.status
-    })
   end
 end
