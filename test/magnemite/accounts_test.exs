@@ -4,6 +4,29 @@ defmodule Magnemite.AccountsTest do
   alias Magnemite.Accounts
   alias Magnemite.Accounts.AccountOpeningRequest
 
+  describe "list_complete_account_opening_requests/1" do
+    test "lists the records with complete status that matches referrer_id" do
+      %{id: account_opening_request_id, referrer_id: referrer_id} =
+        insert(:complete_account_opening_request)
+
+      assert [%{id: ^account_opening_request_id}] =
+               Accounts.list_complete_account_opening_requests(referrer_id)
+    end
+
+    test "returns an empty array when all records matching referrer_id have pending status" do
+      %{referrer_id: referrer_id} = insert(:pending_account_opening_request)
+
+      assert [] = Accounts.list_complete_account_opening_requests(referrer_id)
+    end
+
+    test "returns an empty array when no record matches referrer_id" do
+      insert(:complete_account_opening_request)
+      another_referrer_id = Ecto.UUID.generate()
+
+      assert [] = Accounts.list_complete_account_opening_requests(another_referrer_id)
+    end
+  end
+
   describe "request_account_opening/2" do
     test """
     inserts an account opening request

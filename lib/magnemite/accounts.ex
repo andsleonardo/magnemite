@@ -11,6 +11,8 @@ defmodule Magnemite.Accounts do
 
   alias Magnemite.Repo
 
+  import Ecto.Query
+
   # ACCOUNT OPENING REQUEST
 
   @doc """
@@ -18,6 +20,18 @@ defmodule Magnemite.Accounts do
   """
   @spec account_opening_request_statuses() :: [AccountOpeningRequestStatuses.t()]
   defdelegate account_opening_request_statuses, to: AccountOpeningRequestStatuses, as: :list
+
+  @doc """
+  Lists account opening requests having the given `referrer_id` and a `complete` status.
+  """
+  @spec list_complete_account_opening_requests(Ecto.UUID.t()) :: [AccountOpeningRequest.t()] | []
+  def list_complete_account_opening_requests(referrer_id) do
+    AccountOpeningRequest
+    |> where([aor], aor.referrer_id == ^referrer_id)
+    |> where([aor], aor.status == :complete)
+    |> preload([_], :customer)
+    |> Repo.all()
+  end
 
   @doc """
   Gets an account opening request with a customer_id or creates one if it doesn't exist.
