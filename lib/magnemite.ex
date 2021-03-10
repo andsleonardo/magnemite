@@ -3,13 +3,32 @@ defmodule Magnemite do
   Magnemite's public API.
   """
 
-  alias __MODULE__.{Account, Accounts, Customers, Identity}
+  alias __MODULE__.{Accounts, Customers, Identity}
   alias __MODULE__.Repo
-
-  import Magnemite.Fallback
 
   defdelegate sign_user_up(username, password), to: Identity, as: :sign_up
   defdelegate sign_user_in(username, password), to: Identity, as: :sign_in
+
+  def list_referrees(referrer_id) do
+    with {:ok, referrer} <- Customers.get_customer(referrer_id),
+         {:ok, referrer} <- validate_customer_opened_account(referrer) do
+      referrals =
+        referrer.id
+        |> Accounts.list_complete_account_opening_requests()
+        |> Enum.map(&Customers.build_referree(&1.id, &1.customer.name))
+
+      {:ok, referrals}
+    end
+  end
+
+  defp validate_customer_opened_account(customer) do
+    customer.id
+    |> Accounts.request_account_opening()
+    |> case do
+      {:ok, %{status: :complete}} -> {:ok, customer}
+      _ -> {:error, :incomplete_account_opening_request}
+    end
+  end
 
   @spec get_or_open_account(map()) :: any()
   def get_or_open_account(%{cpf: cpf} = account_opening_data) do
@@ -57,8 +76,8 @@ defmodule Magnemite do
     |> Customers.complete_customer_with_address?()
   end
 
-  defp maybe_generate_referral_code(customer, %{status: :pending}) do
-    {:ok, nil}
+  defp maybe_generate_referral_code(_customer, %{status: :pending}) do
+    {:ok, %Customers.ReferralCode{}}
   end
 
   defp maybe_generate_referral_code(customer, %{status: :complete}) do
