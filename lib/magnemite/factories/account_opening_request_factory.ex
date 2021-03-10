@@ -16,6 +16,7 @@ defmodule Magnemite.Factories.AccountOpeningRequestFactory do
       def account_opening_request_factory(attrs) do
         %Accounts.AccountOpeningRequest{
           customer: build(:customer),
+          referrer: build(:customer),
           status: random_status()
         }
         |> merge_attributes(attrs)

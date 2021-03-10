@@ -19,7 +19,7 @@ defmodule Magnemite.Accounts.AccountOpeningRequest do
       values: Accounts.AccountOpeningRequestStatuses.list(),
       default: Accounts.AccountOpeningRequestStatuses.pending()
 
-    belongs_to :referrer, Customers.Customer, type: :binary_id, foreign_key: :referrer_id
+    belongs_to :referrer, Customers.Customer, type: :binary_id, source: :customer_id
     belongs_to :customer, Customers.Customer, type: :binary_id
 
     timestamps()
