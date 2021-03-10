@@ -9,7 +9,8 @@ defmodule Magnemite.Customers do
     CustomerValidator,
     GenderOptions,
     ReferralCode,
-    ReferralCodeGenerator
+    ReferralCodeGenerator,
+    Referree
   }
 
   alias Magnemite.Repo
@@ -147,5 +148,9 @@ defmodule Magnemite.Customers do
     })
     |> Repo.insert()
     |> Repo.handle_operation_result()
+  end
+
+  def build_referree(account_id, referree_name) do
+    struct(Referree, account_id: account_id, name: referree_name)
   end
 end
