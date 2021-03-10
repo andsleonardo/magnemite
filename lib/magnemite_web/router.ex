@@ -15,7 +15,7 @@ defmodule MagnemiteWeb.Router do
 
     scope "/v1", V1 do
       resources "/accounts", AccountController, only: [:create]
-      resources "/referrals", ReferralController, only: [:index]
+      resources "/referrees", ReferreeController, only: [:index]
     end
   end
 
