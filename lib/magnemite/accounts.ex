@@ -57,8 +57,8 @@ defmodule Magnemite.Accounts do
   end
 
   @doc """
-  Changes the status of a `%Magnemite.Accounts.AccountOpeningRequest{}`
-  to `:complete` if that's not the record's status yet.
+  Changes the status of an account opening request to `:complete`
+  if that's not the record's status yet.
   """
   @spec complete_account_opening(AccountOpeningRequest.t()) ::
           {:ok, AccountOpeningRequest.t()} | {:error, :changeset, map()}

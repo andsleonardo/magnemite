@@ -32,9 +32,21 @@ defmodule Magnemite.AccountsTest do
     inserts an account opening request
     when there is a customer matching the given customer_id
     """ do
-      customer = insert(:customer)
+      %{id: customer_id} = insert(:customer)
 
-      assert {:ok, %AccountOpeningRequest{}} = Accounts.request_account_opening(customer.id)
+      assert {:ok, %AccountOpeningRequest{customer_id: ^customer_id}} =
+               Accounts.request_account_opening(customer_id)
+    end
+
+    test """
+    inserts and account opening request with a customer_id and a referrer_id
+    when both of these ids match existing records
+    """ do
+      %{id: customer_id} = insert(:customer)
+      %{id: referrer_id} = insert(:customer)
+
+      assert {:ok, %AccountOpeningRequest{customer_id: ^customer_id, referrer_id: ^referrer_id}} =
+               Accounts.request_account_opening(customer_id, referrer_id)
     end
 
     test """

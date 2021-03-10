@@ -31,7 +31,7 @@ defmodule Magnemite do
   defp request_account_opening(customer, %{referral_code: referral_code})
        when not is_nil(referral_code) do
     with {:ok, referrer} <- Customers.get_referrer(referral_code) do
-      Accounts.request_account_opening(customer.id)
+      Accounts.request_account_opening(customer.id, referrer.id)
     end
   end
 
