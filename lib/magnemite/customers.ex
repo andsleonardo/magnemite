@@ -47,6 +47,19 @@ defmodule Magnemite.Customers do
   end
 
   @doc """
+  Gets a `%Magnemite.Customers.Customer{}` if any meets the given `criteria`.
+  """
+  @spec get_customer_by(Keyword.t()) :: {:ok, Customer.t()} | {:error, :customer_not_found}
+  def get_customer_by(criteria) do
+    Customer
+    |> Repo.get_by(criteria)
+    |> case do
+      nil -> {:error, :customer_not_found}
+      customer -> {:ok, customer}
+    end
+  end
+
+  @doc """
   Gets a `%Magnemite.Customers.Customer{}` by its `referral_code_number`.
   """
   @spec get_referrer(String.t() | nil) :: {:ok, Customer.t()} | {:error, :invalid_referral_code}

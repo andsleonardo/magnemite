@@ -29,6 +29,26 @@ defmodule Magnemite.CustomersTest do
     end
   end
 
+  describe "get_customer_by/1" do
+    setup do
+      %{
+        customer: insert(:customer)
+      }
+    end
+
+    test "returns a customer when such record meets the given criteria", %{
+      customer: %{id: customer_id} = customer
+    } do
+      assert {:ok, %Customer{id: ^customer_id}} =
+               Customers.get_customer_by(user_id: customer.user_id)
+    end
+
+    test "returns an error when no customer meets the given criteria" do
+      assert {:error, :customer_not_found} =
+               Customers.get_customer_by(user_id: Ecto.UUID.generate())
+    end
+  end
+
   describe "get_referrer/1" do
     setup do
       %{
@@ -54,7 +74,7 @@ defmodule Magnemite.CustomersTest do
   describe "upsert_customer_by_cpf/2" do
     setup do
       %{
-        customer_params: params_for(:customer),
+        customer_params: params_for(:customer)
       }
     end
 
