@@ -49,7 +49,8 @@ defmodule Magnemite.MixProject do
       {:nanoid, "~> 2.0.5"},
       {:argon2_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
-      {:guardian_phoenix, "~> 2.0"}
+      {:guardian_phoenix, "~> 2.0"},
+      {:cloak_ecto, "~> 1.1.1"}
     ]
   end
 
