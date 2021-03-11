@@ -20,7 +20,8 @@ defmodule MagnemiteWeb.Api.V1.UserControllerTest do
 
       assert %{
                "id" => _,
-               "username" => ^username
+               "username" => ^username,
+               "token" => _
              } = parsed_resp_body!(conn)
     end
 

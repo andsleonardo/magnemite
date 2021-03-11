@@ -19,7 +19,7 @@ defmodule MagnemiteWeb.Api.V1.UserController do
   def sign_up(conn, params) do
     with {:ok, params} <- permit_and_require_params(params, &SignUpParams.changeset/1),
          {:ok, user} <- Magnemite.sign_user_up(params.username, params.password) do
-      json(conn, UserView.render("sign_up.json", %{user: user}))
+      json(conn, render_user(user))
     end
   end
 
@@ -32,7 +32,11 @@ defmodule MagnemiteWeb.Api.V1.UserController do
   def sign_in(conn, params) do
     with {:ok, params} <- permit_and_require_params(params, &SignUpParams.changeset/1),
          {:ok, user} <- Magnemite.sign_user_in(params.username, params.password) do
-      json(conn, UserView.render("sign_in.json", %{user: user}))
+      json(conn, render_user(user))
     end
+  end
+
+  defp render_user(user) do
+    UserView.render("show.json", %{user: user})
   end
 end

@@ -3,15 +3,7 @@ defmodule MagnemiteWeb.Api.V1.UserView do
 
   use MagnemiteWeb, :view
 
-  def render("sign_up.json", %{user: user}) do
-    user
-    |> Map.take([
-      :id,
-      :username
-    ])
-  end
-
-  def render("sign_in.json", %{user: user}) do
+  def render("show.json", %{user: user}) do
     user
     |> Map.take([
       :id,
