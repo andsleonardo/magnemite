@@ -4,18 +4,6 @@ defmodule Magnemite.IdentityTest do
   alias Magnemite.Identity
   alias Magnemite.Identity.User
 
-  describe "get_user/1" do
-    test "gets the user matching the given id when such record exists" do
-      %{id: user_id} = insert(:user)
-
-      assert {:ok, %{id: ^user_id}} = Identity.get_user(user_id)
-    end
-
-    test "returns an error when no record matches the given id" do
-      assert {:error, :user_not_found} = Identity.get_user("invalid_id")
-    end
-  end
-
   describe "sign_up/2" do
     @user_params params_for(:user)
 

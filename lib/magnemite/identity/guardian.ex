@@ -3,8 +3,7 @@ defmodule Magnemite.Identity.Guardian do
 
   use Guardian, otp_app: :magnemite
 
-  alias Magnemite.Identity
-  alias Magnemite.Identity.User
+  alias Magnemite.Identity.{User, Users}
 
   def subject_for_token(%User{id: nil}, _claims) do
     {:error, :invalid_token_resource}
@@ -19,7 +18,7 @@ defmodule Magnemite.Identity.Guardian do
   end
 
   def resource_from_claims(%{"sub" => user_id}) do
-    Identity.get_user(user_id)
+    Users.get(user_id)
   end
 
   def resource_from_claims(_claims) do

@@ -3,62 +3,34 @@ defmodule Magnemite.Identity do
   Internal API for Identity.
   """
 
-  alias __MODULE__.{Guardian, User}
-  alias Magnemite.Repo
+  alias __MODULE__.{Guardian, User, Users}
 
-  def get_user(id) do
-    User
-    |> Repo.get(id)
-    |> case do
-      nil -> {:error, :user_not_found}
-      user -> {:ok, user}
+  @doc """
+  Registers a user and signs them in.
+  """
+  @spec sign_up(String.t(), String.t()) ::
+          {:ok, User.t()} | {:error, any()} | {:error, :changeset, map()}
+  def sign_up(username, password) do
+    with {:ok, user} <- Users.create(username: username, password: password) do
+      sign_in(user, user.password)
     end
   end
 
-  def sign_up(username, password) do
-    create_user(username: username, password: password)
-  end
-
-  defp create_user(params) do
-    %User{}
-    |> User.create_changeset(Map.new(params))
-    |> Repo.insert()
-    |> Repo.handle_operation_result()
-  end
-
+  @doc """
+  Signs a user in.
+  """
+  @spec sign_in(User.t() | String.t(), String.t()) ::
+          {:ok, User.t()} | {:error, any()} | {:error, :changeset, map()}
   def sign_in(%User{} = user, password) do
-    with {:ok, user} <- validate_user_matches_password(user, password) do
-      generate_user_token(user)
+    with {:ok, user} <- Users.validate_password(user, password),
+         {:ok, token, _} <- Guardian.encode_and_sign(user) do
+      Users.assign_token(user, token)
     end
   end
 
   def sign_in(username, password) do
-    with {:ok, user} <- get_user_by(username: username) do
+    with {:ok, user} <- Users.get_by_username(username) do
       sign_in(user, password)
-    end
-  end
-
-  defp get_user_by(criteria) do
-    User
-    |> Repo.get_by(criteria)
-    |> case do
-      nil -> {:error, :user_not_found}
-      user -> {:ok, user}
-    end
-  end
-
-  defp validate_user_matches_password(user, password) do
-    user
-    |> Argon2.check_pass(password)
-    |> case do
-      {:error, _} -> {:error, :invalid_password}
-      success -> success
-    end
-  end
-
-  defp generate_user_token(%User{} = user) do
-    with {:ok, token, _} <- Guardian.encode_and_sign(user) do
-      User.edit(user, token: token)
     end
   end
 end
