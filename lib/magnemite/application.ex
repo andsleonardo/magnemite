@@ -14,7 +14,9 @@ defmodule Magnemite.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Magnemite.PubSub},
       # Start the Endpoint (http/https)
-      MagnemiteWeb.Endpoint
+      MagnemiteWeb.Endpoint,
+      # Start the encryption application
+      Magnemite.Vault
       # Start a worker by calling: Magnemite.Worker.start_link(arg)
       # {Magnemite.Worker, arg}
     ]
