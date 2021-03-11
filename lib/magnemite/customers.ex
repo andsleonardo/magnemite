@@ -88,7 +88,7 @@ defmodule Magnemite.Customers do
       |> Map.merge(%{cpf: cpf})
 
     Customer
-    |> Repo.get_by(cpf: cpf)
+    |> Repo.get_by(cpf_hash: cpf)
     |> case do
       nil -> create_customer(params)
       customer -> update_customer(customer, params)

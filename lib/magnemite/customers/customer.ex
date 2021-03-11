@@ -1,7 +1,7 @@
 defmodule Magnemite.Customers.Customer do
   @moduledoc false
 
-  use Magnemite.{Changeset, Schema}
+  use Magnemite.{Changeset, Ecto, Schema}
 
   alias Magnemite.{Accounts, Customers, Identity, Repo}
 
@@ -11,11 +11,12 @@ defmodule Magnemite.Customers.Customer do
           id: Ecto.UUID.t(),
           account_opening_request: Accounts.AccountOpeningRequest.t(),
           address: Customers.Address.t() | none(),
-          birth_date: Date.t(),
-          cpf: String.t(),
-          email: String.t(),
+          birth_date: EncryptedDate.t(),
+          cpf: EncryptedBinary.t(),
+          cpf_hash: Cloak.Ecto.SHA256.t(),
+          email: EncryptedBinary.t(),
           gender: [atom()],
-          name: String.t(),
+          name: EncryptedBinary.t(),
           referral_code: Customers.ReferralCode.t(),
           user: Identity.User.t()
         }
@@ -23,11 +24,12 @@ defmodule Magnemite.Customers.Customer do
   @email_regex ~r/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
 
   schema "customers" do
-    field :birth_date, :date
-    field :cpf
-    field :email
+    field :birth_date, EncryptedDate
+    field :cpf, EncryptedBinary
+    field :cpf_hash, Cloak.Ecto.SHA256
+    field :email, EncryptedBinary
     field :gender, {:array, Ecto.Enum}, values: Customers.GenderOptions.list()
-    field :name
+    field :name, EncryptedBinary
 
     has_one :account_opening_request, Accounts.AccountOpeningRequest, on_replace: :update
     has_one :address, Customers.Address, on_replace: :update
@@ -77,5 +79,11 @@ defmodule Magnemite.Customers.Customer do
     |> assoc_constraint(:user)
     |> validate_format(:email, @email_regex, message: "is an invalid email")
     |> validate_cpf(:cpf, message: "is an invalid CPF")
+    |> put_hashed_fields()
+  end
+
+  defp put_hashed_fields(changeset) do
+    changeset
+    |> put_change(:cpf_hash, get_field(changeset, :cpf))
   end
 end

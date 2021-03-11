@@ -6,9 +6,12 @@ defmodule Magnemite.Factories.CustomerFactory do
   defmacro __using__(_opts) do
     quote do
       def customer_factory do
+        cpf = random_cpf()
+
         %Customers.Customer{
           birth_date: Faker.Date.date_of_birth(),
-          cpf: random_cpf(),
+          cpf: cpf,
+          cpf_hash: cpf_hash(cpf),
           email: Faker.Internet.email(),
           gender: [random_gender()],
           name: Faker.Person.PtBr.name(),
@@ -34,6 +37,12 @@ defmodule Magnemite.Factories.CustomerFactory do
 
       defp random_gender do
         Enum.random(Customers.GenderOptions.list())
+      end
+
+      defp cpf_hash(cpf) do
+        :sha256
+        |> :crypto.hash(cpf)
+        |> Base.encode64()
       end
     end
   end

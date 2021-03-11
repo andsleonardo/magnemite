@@ -4,11 +4,12 @@ defmodule Magnemite.Repo.Migrations.CreateCustomers do
   def change do
     create table(:customers, primary_key: false) do
       add :id, :uuid, primary_key: true, null: false
-      add :birth_date, :date
-      add :cpf, :string, null: false
-      add :email, :string
+      add :birth_date, :binary
+      add :cpf, :binary, null: false
+      add :cpf_hash, :binary, null: false
+      add :email, :binary
       add :gender, {:array, :string}
-      add :name, :string
+      add :name, :binary
 
       timestamps()
     end
