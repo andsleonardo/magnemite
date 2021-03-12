@@ -8,20 +8,20 @@ defmodule Magnemite.Customers.ReferralCode do
   schema "referral_codes" do
     field :number, :string
 
-    belongs_to :customer, Customers.Customer
+    belongs_to :profile, Customers.Profile
 
     timestamps()
   end
 
   def changeset(referral_code, params) do
     referral_code
-    |> cast(params, [:number, :customer_id])
-    |> assoc_constraint(:customer)
+    |> cast(params, [:number, :profile_id])
+    |> assoc_constraint(:profile)
     |> validate_required([:number])
     |> validate_format(:number, ~r/\d{8}/)
     |> unsafe_validate_unique([:number], Repo)
-    |> unsafe_validate_unique([:customer_id], Repo)
+    |> unsafe_validate_unique([:profile_id], Repo)
     |> unique_constraint([:number])
-    |> unique_constraint([:customer_id])
+    |> unique_constraint([:profile_id])
   end
 end

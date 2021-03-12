@@ -1,8 +1,8 @@
-defmodule Magnemite.Repo.Migrations.CreateCustomers do
+defmodule Magnemite.Repo.Migrations.CreateProfiles do
   use Ecto.Migration
 
   def change do
-    create table(:customers, primary_key: false) do
+    create table(:profiles, primary_key: false) do
       add :id, :uuid, primary_key: true, null: false
       add :birth_date, :binary
       add :cpf, :binary, null: false

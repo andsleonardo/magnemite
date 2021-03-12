@@ -84,7 +84,7 @@ defmodule MagnemiteTest do
            account_opening_data: account_opening_data,
            user: user
          } do
-      insert(:customer, cpf: account_opening_data.valid.cpf, user: user)
+      insert(:profile, cpf: account_opening_data.valid.cpf, user: user)
 
       assert {:ok,
               %{

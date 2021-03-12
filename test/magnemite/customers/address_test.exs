@@ -15,16 +15,16 @@ defmodule Magnemite.Customers.AddressTest do
       assert %Address{country: nil} = %Address{}
     end
 
-    test ":customer_id defaults to nil" do
-      assert %Address{customer_id: nil} = %Address{}
+    test ":profile_id defaults to nil" do
+      assert %Address{profile_id: nil} = %Address{}
     end
 
     test ":state defaults to nil" do
       assert %Address{state: nil} = %Address{}
     end
 
-    test "has :customer association" do
-      assert %Address{customer: %Ecto.Association.NotLoaded{}} = %Address{}
+    test "has :profile association" do
+      assert %Address{profile: %Ecto.Association.NotLoaded{}} = %Address{}
     end
 
     test "has timestamps" do

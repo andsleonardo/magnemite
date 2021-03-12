@@ -1,4 +1,4 @@
-defmodule Magnemite.Customers.Customer do
+defmodule Magnemite.Customers.Profile do
   @moduledoc false
 
   use Magnemite.{Changeset, Ecto, Schema}
@@ -23,7 +23,7 @@ defmodule Magnemite.Customers.Customer do
 
   @email_regex ~r/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/
 
-  schema "customers" do
+  schema "profiles" do
     field :birth_date, EncryptedDate
     field :cpf, EncryptedBinary
     field :cpf_hash, Cloak.Ecto.SHA256
@@ -43,8 +43,8 @@ defmodule Magnemite.Customers.Customer do
   @doc """
   Specific changeset for creating new customers.
   """
-  def creation_changeset(customer, params) do
-    customer
+  def creation_changeset(profile, params) do
+    profile
     |> cast(params, [
       :birth_date,
       :cpf,
@@ -54,16 +54,17 @@ defmodule Magnemite.Customers.Customer do
       :user_id
     ])
     |> validate_required([:cpf])
-    |> unsafe_validate_unique([:cpf], Repo)
-    |> unique_constraint([:cpf])
+    |> put_hashed_fields()
+    |> unsafe_validate_unique([:cpf_hash], Repo)
+    |> unique_constraint([:cpf_hash])
     |> changeset()
   end
 
   @doc """
   Specific changeset for updating existing customers.
   """
-  def update_changeset(customer, params) do
-    customer
+  def update_changeset(profile, params) do
+    profile
     |> cast(params, [
       :birth_date,
       :email,
@@ -79,7 +80,6 @@ defmodule Magnemite.Customers.Customer do
     |> assoc_constraint(:user)
     |> validate_format(:email, @email_regex, message: "is an invalid email")
     |> validate_cpf(:cpf, message: "is an invalid CPF")
-    |> put_hashed_fields()
   end
 
   defp put_hashed_fields(changeset) do

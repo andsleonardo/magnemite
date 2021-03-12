@@ -10,34 +10,34 @@ defmodule Magnemite do
   defdelegate sign_user_in(username, password), to: Identity, as: :sign_in
 
   def list_referrees(referrer_id) do
-    with {:ok, referrer} <- Customers.get_customer(referrer_id),
-         {:ok, referrer} <- validate_customer_opened_account(referrer) do
+    with {:ok, referrer} <- Customers.get_profile(referrer_id),
+         {:ok, referrer} <- validate_profile_opened_account(referrer) do
       referrals =
         referrer.id
         |> Accounts.list_complete_account_opening_requests()
-        |> Enum.map(&Customers.build_referree(&1.id, &1.customer.name))
+        |> Enum.map(&Customers.build_referree(&1.id, &1.profile.name))
 
       {:ok, referrals}
     end
   end
 
-  defp validate_customer_opened_account(customer) do
-    customer.id
+  defp validate_profile_opened_account(profile) do
+    profile.id
     |> Accounts.request_account_opening()
     |> case do
-      {:ok, %{status: :complete}} -> {:ok, customer}
+      {:ok, %{status: :complete}} -> {:ok, profile}
       _ -> {:error, :incomplete_account_opening_request}
     end
   end
 
-  @spec get_or_open_account(map()) :: any()
-  def get_or_open_account(%{cpf: cpf} = account_opening_data) do
+  @spec get_or_open_account(Ecto.UUID.t(), map()) :: any()
+  def get_or_open_account(user_id, account_opening_data) do
     account_opening_data = transform_address_params(account_opening_data)
 
-    with {:ok, customer} <- Customers.upsert_customer_by_cpf(cpf, account_opening_data),
-         {:ok, account_opening} <- request_account_opening(customer, account_opening_data),
-         {:ok, account_opening} <- maybe_complete_account_opening(account_opening, customer),
-         {:ok, referral_code} <- maybe_generate_referral_code(customer, account_opening) do
+    with {:ok, profile} <- Customers.upsert_profile(user_id, account_opening_data),
+         {:ok, account_opening} <- request_account_opening(profile, account_opening_data),
+         {:ok, account_opening} <- maybe_complete_account_opening(account_opening, profile),
+         {:ok, referral_code} <- maybe_generate_referral_code(profile, account_opening) do
       {:ok, Accounts.build_account(account_opening.status, referral_code.number)}
     end
   end
@@ -47,40 +47,40 @@ defmodule Magnemite do
     Map.merge(account_opening_data, %{address: address})
   end
 
-  defp request_account_opening(customer, %{referral_code: referral_code})
+  defp request_account_opening(profile, %{referral_code: referral_code})
        when not is_nil(referral_code) do
     with {:ok, referrer} <- Customers.get_referrer(referral_code) do
-      Accounts.request_account_opening(customer.id, referrer.id)
+      Accounts.request_account_opening(profile.id, referrer.id)
     end
   end
 
-  defp request_account_opening(customer, _account_opening_data) do
-    Accounts.request_account_opening(customer.id)
+  defp request_account_opening(profile, _account_opening_data) do
+    Accounts.request_account_opening(profile.id)
   end
 
-  defp maybe_complete_account_opening(%{status: :complete} = account_opening, _customer) do
+  defp maybe_complete_account_opening(%{status: :complete} = account_opening, _profile) do
     {:ok, account_opening}
   end
 
-  defp maybe_complete_account_opening(account_opening, customer) do
-    if complete_account?(customer) do
+  defp maybe_complete_account_opening(account_opening, profile) do
+    if complete_account?(profile) do
       Accounts.complete_account_opening(account_opening)
     else
       {:ok, account_opening}
     end
   end
 
-  defp complete_account?(customer) do
-    customer
+  defp complete_account?(profile) do
+    profile
     |> Repo.preload(:address)
-    |> Customers.complete_customer_with_address?()
+    |> Customers.complete_profile_with_address?()
   end
 
-  defp maybe_generate_referral_code(_customer, %{status: :pending}) do
+  defp maybe_generate_referral_code(_profile, %{status: :pending}) do
     {:ok, %Customers.ReferralCode{}}
   end
 
-  defp maybe_generate_referral_code(customer, %{status: :complete}) do
-    Customers.get_or_create_referral_code(customer)
+  defp maybe_generate_referral_code(profile, %{status: :complete}) do
+    Customers.get_or_create_referral_code(profile)
   end
 end

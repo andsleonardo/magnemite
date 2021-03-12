@@ -8,7 +8,7 @@ defmodule Magnemite.Repo.Migrations.CreateAddresses do
       add :country, :string
       add :state, :string
 
-      add :customer_id, references(:customers, type: :uuid, on_delete: :delete_all), null: false
+      add :profile_id, references(:profiles, type: :uuid, on_delete: :delete_all), null: false
 
       timestamps()
     end

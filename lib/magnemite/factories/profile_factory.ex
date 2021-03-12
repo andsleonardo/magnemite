@@ -1,14 +1,14 @@
-defmodule Magnemite.Factories.CustomerFactory do
+defmodule Magnemite.Factories.ProfileFactory do
   @moduledoc false
 
   alias Magnemite.Customers
 
   defmacro __using__(_opts) do
     quote do
-      def customer_factory do
+      def profile_factory do
         cpf = random_cpf()
 
-        %Customers.Customer{
+        %Customers.Profile{
           birth_date: Faker.Date.date_of_birth(),
           cpf: cpf,
           cpf_hash: cpf_hash(cpf),
@@ -19,14 +19,14 @@ defmodule Magnemite.Factories.CustomerFactory do
         }
       end
 
-      def complete_customer_factory(attrs) do
-        customer_factory()
+      def complete_profile_factory(attrs) do
+        profile_factory()
         |> merge_attributes(referral_code: build(:referral_code))
         |> merge_attributes(attrs)
       end
 
-      def incomplete_customer_factory do
-        %Customers.Customer{
+      def incomplete_profile_factory do
+        %Customers.Profile{
           cpf: random_cpf()
         }
       end

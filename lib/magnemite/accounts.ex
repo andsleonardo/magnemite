@@ -34,21 +34,21 @@ defmodule Magnemite.Accounts do
   end
 
   @doc """
-  Gets an account opening request with a customer_id or creates one if it doesn't exist.
+  Gets an account opening request with a profile_id or creates one if it doesn't exist.
   """
   @spec request_account_opening(Ecto.UUID.t(), Ecto.UUID.t() | none()) ::
           {:ok, AccountOpeningRequest.t()} | {:error, :changeset, map()}
-  def request_account_opening(customer_id, referrer_id \\ nil) when not is_nil(customer_id) do
+  def request_account_opening(profile_id, referrer_id \\ nil) when not is_nil(profile_id) do
     AccountOpeningRequest
-    |> Repo.get_by(customer_id: customer_id)
+    |> Repo.get_by(profile_id: profile_id)
     |> case do
-      nil -> create_account_opening_request(customer_id, referrer_id)
+      nil -> create_account_opening_request(profile_id, referrer_id)
       account_opening_request -> {:ok, account_opening_request}
     end
   end
 
-  defp create_account_opening_request(customer_id, referrer_id) do
-    params = %{customer_id: customer_id, referrer_id: referrer_id}
+  defp create_account_opening_request(profile_id, referrer_id) do
+    params = %{profile_id: profile_id, referrer_id: referrer_id}
 
     %AccountOpeningRequest{}
     |> AccountOpeningRequest.changeset(params)

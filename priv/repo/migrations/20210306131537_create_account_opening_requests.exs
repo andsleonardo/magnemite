@@ -6,7 +6,7 @@ defmodule Magnemite.Repo.Migrations.CreateAccountOpeningRequests do
       add :id, :uuid, primary_key: true, null: false
       add :status, :string, null: false
 
-      add :customer_id, references(:customers, type: :uuid, on_delete: :delete_all), null: false
+      add :profile_id, references(:profiles, type: :uuid, on_delete: :delete_all), null: false
 
       timestamps()
     end

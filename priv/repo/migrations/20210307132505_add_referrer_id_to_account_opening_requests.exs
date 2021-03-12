@@ -3,7 +3,7 @@ defmodule Magnemite.Repo.Migrations.AddReferrerIdToAccountOpeningRequests do
 
   def change do
     alter table(:account_opening_requests) do
-      add :referrer_id, references(:customers, type: :uuid)
+      add :referrer_id, references(:profiles, type: :uuid)
     end
   end
 end

@@ -8,7 +8,7 @@ defmodule Magnemite.Factories.ReferralCodeFactory do
       def referral_code_factory do
         %Customers.ReferralCode{
           number: referral_code_number(),
-          customer: build(:customer)
+          profile: build(:profile)
         }
       end
     end

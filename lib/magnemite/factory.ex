@@ -7,7 +7,7 @@ defmodule Magnemite.Factory do
     AccountFactory,
     AccountOpeningRequestFactory,
     AddressFactory,
-    CustomerFactory,
+    ProfileFactory,
     ReferralCodeFactory,
     ReferreeFactory,
     UserFactory

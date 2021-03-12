@@ -21,8 +21,8 @@ defmodule Magnemite.Identity.UserTest do
       assert %User{username: nil} = %User{}
     end
 
-    test "has :customer association" do
-      assert %User{customer: %Ecto.Association.NotLoaded{}} = %User{}
+    test "has :profile association" do
+      assert %User{profile: %Ecto.Association.NotLoaded{}} = %User{}
     end
 
     test "has timestamps" do

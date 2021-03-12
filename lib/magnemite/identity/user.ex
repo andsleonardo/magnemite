@@ -11,7 +11,7 @@ defmodule Magnemite.Identity.User do
     field :token, :string, virtual: true
     field :username
 
-    has_one :customer, Customers.Customer, on_replace: :update
+    has_one :profile, Customers.Profile, on_replace: :update
 
     timestamps()
   end

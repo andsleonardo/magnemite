@@ -30,30 +30,30 @@ defmodule Magnemite.AccountsTest do
   describe "request_account_opening/2" do
     test """
     inserts an account opening request
-    when there is a customer matching the given customer_id
+    when there is a profile matching the given profile_id
     """ do
-      %{id: customer_id} = insert(:customer)
+      %{id: profile_id} = insert(:profile)
 
-      assert {:ok, %AccountOpeningRequest{customer_id: ^customer_id}} =
-               Accounts.request_account_opening(customer_id)
+      assert {:ok, %AccountOpeningRequest{profile_id: ^profile_id}} =
+               Accounts.request_account_opening(profile_id)
     end
 
     test """
-    inserts and account opening request with a customer_id and a referrer_id
+    inserts and account opening request with a profile_id and a referrer_id
     when both of these ids match existing records
     """ do
-      %{id: customer_id} = insert(:customer)
-      %{id: referrer_id} = insert(:customer)
+      %{id: profile_id} = insert(:profile)
+      %{id: referrer_id} = insert(:profile)
 
-      assert {:ok, %AccountOpeningRequest{customer_id: ^customer_id, referrer_id: ^referrer_id}} =
-               Accounts.request_account_opening(customer_id, referrer_id)
+      assert {:ok, %AccountOpeningRequest{profile_id: ^profile_id, referrer_id: ^referrer_id}} =
+               Accounts.request_account_opening(profile_id, referrer_id)
     end
 
     test """
     returns an error when trying to create an account opening request
-    with a customer_id that does not match any record
+    with a profile_id that does not match any record
     """ do
-      assert {:error, :changeset, %{customer: ["does not exist"]}} =
+      assert {:error, :changeset, %{profile: ["does not exist"]}} =
                Accounts.request_account_opening(Ecto.UUID.generate())
     end
   end

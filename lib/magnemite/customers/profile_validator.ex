@@ -1,10 +1,10 @@
-defmodule Magnemite.Customers.CustomerValidator do
+defmodule Magnemite.Customers.ProfileValidator do
   @moduledoc false
 
-  alias Magnemite.Customers
+  alias Magnemite.Customers.Profile
 
-  def complete_customer?(%Customers.Customer{} = customer) do
-    customer
+  def complete?(%Profile{} = profile) do
+    profile
     |> Map.take([
       :birth_date,
       :cpf,

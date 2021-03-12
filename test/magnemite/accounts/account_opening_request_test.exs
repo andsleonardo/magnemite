@@ -11,8 +11,8 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
       assert %AccountOpeningRequest{status: :pending} = %AccountOpeningRequest{}
     end
 
-    test "has :customer association through :customer_id" do
-      assert %AccountOpeningRequest{customer: %Ecto.Association.NotLoaded{}, customer_id: nil} =
+    test "has :profile association through :profile_id" do
+      assert %AccountOpeningRequest{profile: %Ecto.Association.NotLoaded{}, profile_id: nil} =
                %AccountOpeningRequest{}
     end
 
@@ -34,12 +34,12 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
                AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{status: status})
     end
 
-    test "casts :customer_id as string" do
-      customer_id = Ecto.UUID.generate()
+    test "casts :profile_id as string" do
+      profile_id = Ecto.UUID.generate()
 
-      assert %Changeset{changes: %{customer_id: ^customer_id}} =
+      assert %Changeset{changes: %{profile_id: ^profile_id}} =
                AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{
-                 customer_id: customer_id
+                 profile_id: profile_id
                })
     end
 
@@ -61,13 +61,13 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
       assert "is invalid" in errors
     end
 
-    test "invalidates a non-unique :customer_id" do
-      %{customer_id: customer_id} = insert(:account_opening_request)
+    test "invalidates a non-unique :profile_id" do
+      %{profile_id: profile_id} = insert(:account_opening_request)
 
       errors =
         %AccountOpeningRequest{}
-        |> AccountOpeningRequest.changeset(%{customer_id: customer_id})
-        |> errors_on(:customer_id)
+        |> AccountOpeningRequest.changeset(%{profile_id: profile_id})
+        |> errors_on(:profile_id)
 
       assert "has already been taken" in errors
     end

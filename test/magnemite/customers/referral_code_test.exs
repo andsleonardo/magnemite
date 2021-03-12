@@ -11,8 +11,8 @@ defmodule Magnemite.Customers.ReferralCodeTest do
       assert %ReferralCode{number: nil} = %ReferralCode{}
     end
 
-    test "has :customer association" do
-      assert %ReferralCode{customer: %Ecto.Association.NotLoaded{}} = %ReferralCode{}
+    test "has :profile association" do
+      assert %ReferralCode{profile: %Ecto.Association.NotLoaded{}} = %ReferralCode{}
     end
 
     test "has timestamps" do
@@ -30,11 +30,11 @@ defmodule Magnemite.Customers.ReferralCodeTest do
                ReferralCode.changeset(%ReferralCode{}, %{number: number})
     end
 
-    test "casts :customer_id" do
-      %{id: customer_id} = insert(:customer)
+    test "casts :profile_id" do
+      %{id: profile_id} = insert(:profile)
 
-      assert %Changeset{changes: %{customer_id: ^customer_id}} =
-               ReferralCode.changeset(%ReferralCode{}, %{customer_id: customer_id})
+      assert %Changeset{changes: %{profile_id: ^profile_id}} =
+               ReferralCode.changeset(%ReferralCode{}, %{profile_id: profile_id})
     end
 
     test "requires :number" do
@@ -68,13 +68,13 @@ defmodule Magnemite.Customers.ReferralCodeTest do
       assert "has already been taken" in errors
     end
 
-    test "invalidates a non-unique :customer_id" do
+    test "invalidates a non-unique :profile_id" do
       referral_code = insert(:referral_code)
 
       errors =
         %ReferralCode{}
-        |> ReferralCode.changeset(%{customer_id: referral_code.customer_id})
-        |> errors_on(:customer_id)
+        |> ReferralCode.changeset(%{profile_id: referral_code.profile_id})
+        |> errors_on(:profile_id)
 
       assert "has already been taken" in errors
     end

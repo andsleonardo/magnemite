@@ -10,7 +10,7 @@ defmodule Magnemite.Factories.AddressFactory do
           city: Faker.Address.PtBr.city(),
           country: Faker.Address.PtBr.country(),
           state: Faker.Address.PtBr.state(),
-          customer: build(:customer)
+          profile: build(:profile)
         }
       end
     end
