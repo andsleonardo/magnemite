@@ -28,7 +28,7 @@ defmodule Magnemite.Accounts.AccountOpeningRequestTest do
 
   describe "changeset/2" do
     test "casts :status as atom" do
-      status = :complete
+      status = :done
 
       assert %Changeset{changes: %{status: ^status}} =
                AccountOpeningRequest.changeset(%AccountOpeningRequest{}, %{status: status})

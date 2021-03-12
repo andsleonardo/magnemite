@@ -10,7 +10,7 @@ defmodule Magnemite.Factories.AccountOpeningRequestFactory do
       end
 
       def complete_account_opening_request_factory do
-        account_opening_request_factory(status: :complete)
+        account_opening_request_factory(status: :done)
       end
 
       def account_opening_request_factory(attrs) do

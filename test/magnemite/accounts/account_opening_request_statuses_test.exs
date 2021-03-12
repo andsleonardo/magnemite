@@ -6,7 +6,7 @@ defmodule Magnemite.Accounts.AccountOpeningRequestStatusesTest do
   describe "list/0" do
     test "returns a list of statuses" do
       assert AccountOpeningRequestStatuses.list() == [
-               :complete,
+               :done,
                :pending
              ]
     end
@@ -15,6 +15,12 @@ defmodule Magnemite.Accounts.AccountOpeningRequestStatusesTest do
   describe "pending/0" do
     test "returns :pending" do
       assert AccountOpeningRequestStatuses.pending() == :pending
+    end
+  end
+
+  describe "done/0" do
+    test "returns :done" do
+      assert AccountOpeningRequestStatuses.done() == :done
     end
   end
 end

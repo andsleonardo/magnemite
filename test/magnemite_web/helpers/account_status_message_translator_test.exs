@@ -13,8 +13,8 @@ defmodule MagnemiteWeb.Helpers.AccountStatusMessageTranslatorTest do
       assert message == AccountStatusMessages.pending_account_message()
     end
 
-    test "renders a message when status is :complete" do
-      message = AccountStatusMessageTranslator.translate_account_status_to_message(:complete)
+    test "renders a message when status is :done" do
+      message = AccountStatusMessageTranslator.translate_account_status_to_message(:done)
 
       assert message == AccountStatusMessages.complete_account_message()
     end

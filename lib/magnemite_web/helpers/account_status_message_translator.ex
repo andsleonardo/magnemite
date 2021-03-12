@@ -10,7 +10,7 @@ defmodule MagnemiteWeb.Helpers.AccountStatusMessageTranslator do
     AccountStatusMessages.pending_account_message()
   end
 
-  def translate_account_status_to_message(:complete) do
+  def translate_account_status_to_message(:done) do
     AccountStatusMessages.complete_account_message()
   end
 end
