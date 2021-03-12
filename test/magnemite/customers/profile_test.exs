@@ -2,7 +2,7 @@ defmodule Magnemite.Customers.ProfileTest do
   use Magnemite.DataCase, async: true
   use Magnemite.Changeset
 
-  alias Magnemite.Customers.Profile
+  alias Magnemite.Customers.{Profile, Profiles}
 
   describe "schema/2" do
     test ":birth_date defaults to nil" do
@@ -123,6 +123,18 @@ defmodule Magnemite.Customers.ProfileTest do
         |> errors_on(:cpf)
 
       assert "is an invalid CPF" in errors
+    end
+
+    test "doesn't accept a non-unique :cpf_hash built from :cpf" do
+      old_profile_params = params_for(:profile, user_id: insert(:user).id)
+      {:ok, %{cpf: cpf}} = Profiles.create(old_profile_params)
+
+      errors =
+        %Profile{}
+        |> Profile.creation_changeset(%{cpf: cpf})
+        |> errors_on(:cpf_hash)
+
+      assert "has already been taken" in errors
     end
   end
 
