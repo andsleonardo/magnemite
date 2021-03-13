@@ -7,11 +7,8 @@ defmodule Magnemite.Accounts do
     Account,
     AccountOpeningRequest,
     AccountOpeningRequests,
-    AccountOpeningRequestQuery,
     AccountOpeningRequestStatuses
   }
-
-  alias Magnemite.Repo
 
   @doc """
   Lists the possible account opening request statuses.

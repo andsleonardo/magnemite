@@ -3,26 +3,6 @@ defmodule Magnemite.Customers.ProfilesTest do
 
   alias Magnemite.Customers.{Profile, Profiles}
 
-  describe "list/0" do
-    test "lists all created profiles" do
-      [
-        %{id: profile1_id},
-        %{id: profile2_id},
-        %{id: profile3_id}
-      ] = insert_list(3, :profile)
-
-      assert [
-               %{id: ^profile1_id},
-               %{id: ^profile2_id},
-               %{id: ^profile3_id}
-             ] = Profiles.list()
-    end
-
-    test "returns an empty list when there are no created profiles" do
-      assert [] = Profiles.list()
-    end
-  end
-
   describe "get/1" do
     test "gets the profile matching id" do
       %{id: profile_id} = insert(:profile)

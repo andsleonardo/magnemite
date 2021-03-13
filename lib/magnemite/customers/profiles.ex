@@ -4,10 +4,6 @@ defmodule Magnemite.Customers.Profiles do
   alias Magnemite.Customers.{Profile, ProfileQuery, ProfileValidator}
   alias Magnemite.Repo
 
-  def list do
-    Repo.all(Profile)
-  end
-
   def get(id) do
     Profile
     |> Repo.get(id)

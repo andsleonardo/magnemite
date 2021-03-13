@@ -2,7 +2,7 @@ defmodule Magnemite.AccountsTest do
   use Magnemite.DataCase, async: true
 
   alias Magnemite.Accounts
-  alias Magnemite.Accounts.{Account, AccountOpeningRequest}
+  alias Magnemite.Accounts.Account
 
   describe "list_complete_referred_accounts/1" do
     test "lists accounts with complete opening requests from a referrer" do
