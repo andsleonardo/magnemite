@@ -15,7 +15,7 @@ defmodule MagnemiteWeb.Router do
 
     scope "/v1", V1 do
       post "/accounts", AccountController, :open_account
-      get "/accounts/referrees", AccountController, :list_referrees
+      get "/accounts/referred", AccountController, :list_referred
     end
   end
 
