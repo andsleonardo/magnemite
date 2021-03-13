@@ -27,7 +27,7 @@ defmodule Magnemite.Accounts.AccountOpeningRequest do
 
   def changeset(account_opening_request, params) do
     account_opening_request
-    |> cast(params, [:status, :profile_id, :referrer_id])
+    |> cast(Map.new(params), [:status, :profile_id, :referrer_id])
     |> validate_required([:profile_id])
     |> assoc_constraint(:profile)
     |> assoc_constraint(:referrer)

@@ -6,14 +6,12 @@ defmodule Magnemite.Accounts do
   alias __MODULE__.{
     Account,
     AccountOpeningRequest,
+    AccountOpeningRequests,
+    AccountOpeningRequestQuery,
     AccountOpeningRequestStatuses
   }
 
   alias Magnemite.Repo
-
-  import Ecto.Query
-
-  # ACCOUNT OPENING REQUEST
 
   @doc """
   Lists the possible account opening request statuses.
@@ -21,65 +19,30 @@ defmodule Magnemite.Accounts do
   @spec account_opening_request_statuses() :: [AccountOpeningRequestStatuses.t()]
   defdelegate account_opening_request_statuses, to: AccountOpeningRequestStatuses, as: :list
 
-  @doc """
-  Lists account opening requests having the given `referrer_id` and a `complete` status.
-  """
-  @spec list_complete_account_opening_requests(Ecto.UUID.t()) :: [AccountOpeningRequest.t()] | []
-  def list_complete_account_opening_requests(referrer_id) do
-    AccountOpeningRequest
-    |> where([aor], aor.referrer_id == ^referrer_id)
-    |> where([aor], aor.status == :complete)
-    |> preload([_], :customer)
-    |> Repo.all()
-  end
+  defdelegate get_account_opening_request_by_profile_id(profile_id),
+    to: AccountOpeningRequests,
+    as: :get_by_profile_id
 
   @doc """
-  Gets an account opening request with a profile_id or creates one if it doesn't exist.
+  Gets the profile's account opening request or creates one if none exists.
   """
-  @spec request_account_opening(Ecto.UUID.t(), Ecto.UUID.t() | none()) ::
+  @spec get_or_create_account_opening_request(Ecto.UUID.t(), Ecto.UUID.t() | none()) ::
           {:ok, AccountOpeningRequest.t()} | {:error, :changeset, map()}
-  def request_account_opening(profile_id, referrer_id \\ nil) when not is_nil(profile_id) do
-    AccountOpeningRequest
-    |> Repo.get_by(profile_id: profile_id)
-    |> case do
-      nil -> create_account_opening_request(profile_id, referrer_id)
-      account_opening_request -> {:ok, account_opening_request}
-    end
-  end
+  defdelegate get_or_create_account_opening_request(profile_id, referrer_id),
+    to: AccountOpeningRequests,
+    as: :get_or_create
 
-  defp create_account_opening_request(profile_id, referrer_id) do
-    params = %{profile_id: profile_id, referrer_id: referrer_id}
-
-    %AccountOpeningRequest{}
-    |> AccountOpeningRequest.changeset(params)
-    |> Repo.insert()
-    |> Repo.handle_operation_result()
-  end
+  defdelegate complete_account_opening_request(account_opening_request),
+    to: AccountOpeningRequests,
+    as: :complete
 
   @doc """
-  Changes the status of an account opening request to `:complete`
-  if that's not the record's status yet.
+  Lists complete accounts created from a referral.
   """
-  @spec complete_account_opening(AccountOpeningRequest.t()) ::
-          {:ok, AccountOpeningRequest.t()} | {:error, :changeset, map()}
-  def complete_account_opening(
-        %AccountOpeningRequest{status: :complete} = account_opening_request
-      ) do
-    {:ok, account_opening_request}
-  end
-
-  def complete_account_opening(%AccountOpeningRequest{} = account_opening_request) do
-    update_account_opening_request(account_opening_request, %{status: :complete})
-  end
-
-  defp update_account_opening_request(account_opening_request, params) do
-    account_opening_request
-    |> __MODULE__.AccountOpeningRequest.changeset(params)
-    |> Repo.update()
-    |> Repo.handle_operation_result()
-  end
-
-  def build_account(status, referral_code \\ nil) do
-    struct(Account, %{status: status, referral_code: referral_code})
+  @spec list_complete_referred_accounts(Ecto.UUID.t()) :: [Account.t()] | []
+  def list_complete_referred_accounts(referrer_id) do
+    referrer_id
+    |> AccountOpeningRequests.list_done_by_referrer_id()
+    |> Enum.map(&AccountOpeningRequests.to_account/1)
   end
 end
