@@ -10,6 +10,8 @@ defmodule Magnemite.Accounts.AccountOpeningRequests do
 
   alias Magnemite.Repo
 
+  import Magnemite.Fallback
+
   def list_done_by_referrer_id(referrer_id) do
     referrer_id
     |> AccountOpeningRequestQuery.done_by_referrer_id()
@@ -57,13 +59,20 @@ defmodule Magnemite.Accounts.AccountOpeningRequests do
   end
 
   def to_account(%AccountOpeningRequest{} = account_opening_request) do
-    account_opening_request = Repo.preload(account_opening_request, :profile)
+    account_opening_request =
+      account_opening_request
+      |> Repo.preload(profile: :referral_code)
+
+    referral_code_number =
+      account_opening_request.profile.referral_code
+      |> fallback_to(%{})
+      |> Map.get(:number)
 
     Account
     |> struct(%{
       id: account_opening_request.id,
-      name: Map.get(account_opening_request.profile, :name),
-      referral_code: Map.get(account_opening_request.profile, :referral_code),
+      name: account_opening_request.profile.name,
+      referral_code: referral_code_number,
       status: account_opening_request.status
     })
   end

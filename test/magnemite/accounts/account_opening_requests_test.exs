@@ -104,13 +104,15 @@ defmodule Magnemite.Accounts.AccountOpeningRequestsTest do
 
   describe "to_account/1" do
     test "transforms an account opening request into an account" do
-      account_opening_request = insert(:complete_account_opening_request)
+      %{profile: profile} = referral_code = insert(:referral_code)
+      account_opening_request = insert(:complete_account_opening_request, profile: profile)
+
       account = AccountOpeningRequests.to_account(account_opening_request)
 
       assert account == %Account{
                id: account_opening_request.id,
-               name: account_opening_request.profile.name,
-               referral_code: account_opening_request.profile.referral_code,
+               name: profile.name,
+               referral_code: referral_code.number,
                status: account_opening_request.status
              }
     end
