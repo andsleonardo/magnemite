@@ -9,7 +9,6 @@ defmodule Magnemite.Factory do
     AddressFactory,
     ProfileFactory,
     ReferralCodeFactory,
-    ReferreeFactory,
     UserFactory
   }
 

@@ -15,14 +15,16 @@ defmodule Magnemite.Factories.AccountFactory do
 
       def account_factory(attrs) do
         %Accounts.Account{
-          status: random_status(),
-          referral_code: referral_code_number()
+          id: Ecto.UUID.generate(),
+          name: Faker.Person.PtBr.name(),
+          referral_code: referral_code_number(),
+          status: random_status()
         }
         |> merge_attributes(attrs)
       end
 
       defp random_status do
-        Enum.random(Accounts.account_opening_request_statuses())
+        Enum.random(Accounts.AccountOpeningRequestStatuses.list())
       end
     end
   end
