@@ -1,4 +1,4 @@
-defmodule MagnemiteWeb.Api.V1.AccountController.CreateParams do
+defmodule MagnemiteWeb.Api.V1.AccountController.OpenAccountParams do
   @moduledoc false
 
   use Magnemite.{Changeset, Schema}
