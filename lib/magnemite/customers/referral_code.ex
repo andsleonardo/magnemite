@@ -15,7 +15,7 @@ defmodule Magnemite.Customers.ReferralCode do
 
   def changeset(referral_code, params) do
     referral_code
-    |> cast(params, [:number, :profile_id])
+    |> cast(Map.new(params), [:number, :profile_id])
     |> assoc_constraint(:profile)
     |> validate_required([:number])
     |> validate_format(:number, ~r/\d{8}/)
