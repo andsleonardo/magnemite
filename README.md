@@ -24,6 +24,7 @@ Magnemite's API documentation can be found [here on Postman](https://documenter.
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ### Environment variables
+
 1. Copy `.env.sample` to `.env.development`.
 2. Generate a secret key with `mix phx.gen.secret` and assign it to `GUARDIAN_SECRET_KEY`.
 3. Run `iex`, generate an encryption key for [cloak_ecto](https://github.com/danielberkompas/cloak_ecto) with the command below and assign it to `CLOAK_SECRET_KEY`.
@@ -31,3 +32,10 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 ```elixir
 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
 ```
+## Contributing
+
+1. [Fork the repository](https://github.com/andsleonardo/magnemite/fork).
+2. Create your feature branch with `git checkout -b feat-fooBar`.
+3. Commit your changes with `git commit -am 'Add some fooBar'`.
+4. Push your changes to the remote branch with `git push origin feat-fooBar`.
+5. Create a new pull request.
