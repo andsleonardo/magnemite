@@ -28,13 +28,17 @@ defmodule Magnemite.Accounts do
   """
   @spec get_or_create_account_opening_request(Ecto.UUID.t(), Ecto.UUID.t() | none()) ::
           {:ok, AccountOpeningRequest.t()} | {:error, :changeset, map()}
-  defdelegate get_or_create_account_opening_request(profile_id, referrer_id),
+  defdelegate get_or_create_account_opening_request(profile_id, referrer_id \\ nil),
     to: AccountOpeningRequests,
     as: :get_or_create
 
   defdelegate complete_account_opening_request(account_opening_request),
     to: AccountOpeningRequests,
     as: :complete
+
+  defdelegate complete_account_opening_request?(account_opening_request),
+    to: AccountOpeningRequests,
+    as: :complete?
 
   @doc """
   Lists complete accounts created from a referral.

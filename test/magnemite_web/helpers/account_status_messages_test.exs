@@ -6,7 +6,7 @@ defmodule MagnemiteWeb.Helpers.AccountStatusMessagesTest do
   describe "pending_account_message/1" do
     test "renders a pending account message" do
       assert AccountStatusMessages.pending_account_message() ==
-               "Please, send us your missing information in order to open a Magnemite account."
+               "Please, send us your missing information to open an account."
     end
   end
 
