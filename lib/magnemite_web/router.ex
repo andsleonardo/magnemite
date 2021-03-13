@@ -14,8 +14,8 @@ defmodule MagnemiteWeb.Router do
     pipe_through :api_auth
 
     scope "/v1", V1 do
-      resources "/accounts", AccountController, only: [:create]
-      resources "/referrees", ReferreeController, only: [:index]
+      post "/accounts", AccountController, :open_account
+      get "/accounts/referrees", AccountController, :list_referrees
     end
   end
 
