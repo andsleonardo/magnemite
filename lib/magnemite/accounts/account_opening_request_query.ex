@@ -1,7 +1,6 @@
 defmodule Magnemite.Accounts.AccountOpeningRequestQuery do
   @moduledoc false
 
-  alias Magnemite.Accounts
   alias Magnemite.Accounts.{AccountOpeningRequest, AccountOpeningRequestStatuses}
 
   import Ecto.Query

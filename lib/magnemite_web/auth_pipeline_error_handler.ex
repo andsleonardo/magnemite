@@ -6,7 +6,7 @@ defmodule MagnemiteWeb.AuthPipelineErrorHandler do
   @behaviour Guardian.Plug.ErrorHandler
 
   @impl true
-  def auth_error(conn, {type, reason}, _opts) do
+  def auth_error(conn, _error, _opts) do
     send_resp(conn, 401, "Unauthorized")
   end
 end
