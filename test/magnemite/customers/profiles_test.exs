@@ -60,6 +60,55 @@ defmodule Magnemite.Customers.ProfilesTest do
     end
   end
 
+  describe "upsert_by_user_id/2" do
+    setup do
+      %{
+        profile_params: params_for(:profile),
+        user: insert(:user)
+      }
+    end
+
+    test "creates a new profile with CPF and params when no record exists", %{
+      profile_params:
+        %{
+          birth_date: new_birth_date,
+          email: new_email,
+          gender: new_gender,
+          name: new_name
+        } = new_profile_params,
+      user: user
+    } do
+      {:ok,
+       %Profile{
+         birth_date: ^new_birth_date,
+         email: ^new_email,
+         gender: ^new_gender,
+         name: ^new_name
+       }} = Profiles.upsert_by_user_id(user.id, new_profile_params)
+    end
+
+    test "updates the profile matching CPF with params when a record exist", %{
+      profile_params:
+        %{
+          birth_date: new_birth_date,
+          email: new_email,
+          gender: new_gender,
+          name: new_name
+        } = new_profile_params,
+      user: user
+    } do
+      existing_profile = insert(:profile, user: user)
+
+      {:ok,
+       %Profile{
+         birth_date: ^new_birth_date,
+         email: ^new_email,
+         gender: ^new_gender,
+         name: ^new_name
+       }} = Profiles.upsert_by_user_id(existing_profile.user_id, new_profile_params)
+    end
+  end
+
   describe "create/1" do
     test "creates a profile when all valid and required params are given" do
       %{id: user_id} = user = insert(:user)
