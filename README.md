@@ -37,6 +37,10 @@ iex> 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
 
 :warning: Don't forget to `source .env.development`!
 
+### Design choices
+
+Learn more about *Magnemite*'s design choices [here](https://github.com/andsleonardo/magnemite/wiki/Design-choices).
+
 ## Contributing
 
 1. [Fork the repository](https://github.com/andsleonardo/magnemite/fork).
