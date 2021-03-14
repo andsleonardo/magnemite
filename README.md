@@ -2,6 +2,8 @@
 
 A Phoenix app that provides bank account opening functionality to the (fictional) Brazilian Bipolar Bank through a RESTful API.
 
+![](https://cdn.bulbagarden.net/upload/archive/6/6c/20130825075703%21081Magnemite.png)
+
 ## API docs
 
 Magnemite's API documentation can be found [here on Postman](https://documenter.getpostman.com/view/8554720/Tz5qZwyn).
