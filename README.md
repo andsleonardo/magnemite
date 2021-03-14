@@ -13,7 +13,7 @@ Magnemite's API documentation can be found [here on Postman](https://documenter.
 ### Requirements
 
 - [Elixir 1.11.3](https://elixir-lang.org/install.html)
-- [Erlang 23.1.1](https://www.erlang.org/downloads)
+- [Erlang 22.2.1](https://www.erlang.org/downloads)
 - [Nodejs 13.8.0](https://nodejs.org/en/download/)
 - [PostgreSQL 12.6](https://www.postgresql.org/download/)
 
