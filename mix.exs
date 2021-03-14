@@ -20,7 +20,7 @@ defmodule Magnemite.MixProject do
   def application do
     [
       mod: {Magnemite.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ex_machina, :faker]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -43,8 +43,8 @@ defmodule Magnemite.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.6.0", only: [:test, :dev]},
-      {:faker, "~> 0.16", only: [:test, :dev]},
+      {:ex_machina, "~> 2.6.0", only: :test},
+      {:faker, "~> 0.16", only: :test},
       {:brcpfcnpj, "~> 0.2.3"},
       {:nanoid, "~> 2.0.5"},
       {:argon2_elixir, "~> 2.0"},
