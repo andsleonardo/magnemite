@@ -32,8 +32,11 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 3. Run `iex`, generate an encryption key for [cloak_ecto](https://github.com/danielberkompas/cloak_ecto) with the command below and assign it to `CLOAK_SECRET_KEY`.
 
 ```elixir
-32 |> :crypto.strong_rand_bytes() |> Base.encode64()
+iex> 32 |> :crypto.strong_rand_bytes() |> Base.encode64()
 ```
+
+:warning: Don't forget to `source .env.development`!
+
 ## Contributing
 
 1. [Fork the repository](https://github.com/andsleonardo/magnemite/fork).
