@@ -1,11 +1,13 @@
 use Mix.Config
 
+port = String.to_integer(System.get_env("PORT", "4000"))
+
 # Configure your database
 config :magnemite, Magnemite.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "magnemite_dev",
-  hostname: "localhost",
+  username: System.get_env("DATABASE_USERNAME", "postgres"),
+  password: System.get_env("DATABASE_PASSWORD", "postgres"),
+  database: System.get_env("DATABASE_NAME", "magnemite_dev"),
+  hostname: System.get_env("DATABASE_HOSTNAME", "localhost"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -16,7 +18,7 @@ config :magnemite, Magnemite.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :magnemite, MagnemiteWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: port],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
